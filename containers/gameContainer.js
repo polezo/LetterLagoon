@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, Animated, PanResponder } from 'react-native';
 import Draggable from './draggable'
+import uuid from 'react-uuid'
+import { connect } from 'react-redux'
 
 class GameContainer extends React.Component {
 
@@ -10,7 +12,7 @@ class GameContainer extends React.Component {
         //   transform: this._animatedValue.getTranslateTransform()
         // }  
       return (<View style={styles.container} >
-          {word.split("").map(letter=><Draggable letter={letter}/>)}
+          {this.props.selectedWord.split("").map(letter=><Draggable key={uuid()} letter={letter}/>)}
         </View>
       );
     }
@@ -32,6 +34,9 @@ class GameContainer extends React.Component {
       },
      
     });
-    
+  
+const select = (state) => {
+   return {selectedWord: state.selectedWord}
+}
 
-export default GameContainer
+export default connect(select)(GameContainer);

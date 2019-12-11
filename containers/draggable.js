@@ -3,10 +3,21 @@ import { StyleSheet, Text, View, Animated, PanResponder } from 'react-native';
 
 
 class Draggable extends React.Component {
+    
     constructor(props) {
         super(props);
-        this._animatedValue = new Animated.ValueXY()
+
+        this.state = {womped:false}
+        
+        this._wompedAnim = new Animated.ValueXY()
+        this._getWomped = Animated.spring(
+            this._wompedAnim, {
+            toValue: this.animValueHelper()
+        })
+
         this._value= {x:0,y:0}
+        this._animatedValue = new Animated.ValueXY()
+        
         this._animatedValue.addListener(value=>this._value = value)
         this._panResponder = PanResponder.create({
           onStartShouldSetPanResponder: (evt, gestureState) => true,
@@ -14,6 +25,7 @@ class Draggable extends React.Component {
           onMoveShouldSetPanResponder: (evt, gestureState) => true,
           // onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
           onPanResponderGrant: (e, gestureState) => {
+              console.log(this._value)
             this._animatedValue.setOffset({
               x:this._value.x,
               y:this._value.y
@@ -49,11 +61,38 @@ class Draggable extends React.Component {
           // },
         });
       }
-      render() {
+
+      wompChecker = () => {
+          return this.womped
+      }
+
+      componentDidMount() {
+          setTimeout(this.getWomped,1000)
+      }
+
+      getWomped = () => {
+          this._getWomped.start()
+          setTimeout(()=>this._womped=true,1000)
+      }
+
+      getRandomInt = (max) => {
+        let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+          return Math.floor(Math.random() * Math.floor(max)) * plusOrMinus
+      }
+
+      animValueHelper = () => {
+        let animObj = {x:this.getRandomInt(200), y:this.getRandomInt(300)}
+        return animObj
+      }
+
+      render() { 
         const  animatedStyle = {
           transform: this._animatedValue.getTranslateTransform()
         }  
-      return (<Animated.View {...this._panResponder.panHandlers} style={animatedStyle}>
+        const wompedStyle = {
+            transform:this._wompedAnim.getTranslateTransform()
+        }
+      return (<Animated.View {...this._panResponder.panHandlers} style={[animatedStyle,wompedStyle]}>
             <Text style={styles.text}>{this.props.letter}</Text>
           </Animated.View>
       );
@@ -61,13 +100,7 @@ class Draggable extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-      flexDirection:'row', 
-    },
+ 
     text: {
       fontSize: 80
     },
