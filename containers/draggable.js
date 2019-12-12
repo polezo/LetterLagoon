@@ -1,20 +1,17 @@
 import React from 'react';
 import { StyleSheet, Text, View, Animated, PanResponder } from 'react-native';
+import {connect} from 'react-redux'
 
 
 class Draggable extends React.Component {
     
+
     constructor(props) {
         super(props);
-
+        this.marker = React.createRef();
         this.state = {womped:false}
         
-        this._wompedAnim = new Animated.ValueXY()
-        this._getWomped = Animated.spring(
-            this._wompedAnim, {
-            toValue: this.animValueHelper()
-        })
-
+      
         this._value= {x:0,y:0}
         this._animatedValue = new Animated.ValueXY()
         
@@ -47,6 +44,9 @@ class Draggable extends React.Component {
           ,
           // onPanResponderTerminationRequest: (evt, gestureState) => true,
           onPanResponderRelease: (e, gestureState) => {
+            this.marker.measure((x, y, width, height, pageX, pageY) => {
+                this.isDropZone({x, y, width, height, pageX, pageY});
+       })
             // The user has released all touches while this view is the
             // responder. This typically means a gesture has succeeded
           },
@@ -62,38 +62,34 @@ class Draggable extends React.Component {
         });
       }
 
-      wompChecker = () => {
-          return this.womped
-      }
+    //   shouldComponentUpdate(nextProps,nextState) {
+    //       return false
+    //   }
 
-      componentDidMount() {
-          setTimeout(this.getWomped,1000)
-      }
+      isDropZone = (gestureData) => {
+       
+        let hitLetterBox = this.props.letterHitBoxes.find(hitBox => gestureData.pageY > (hitBox.pageY - 50) && gestureData.pageY < (hitBox.pageY + 50) && gestureData.pageX > (hitBox.pageX - 24) && gestureData.pageX < (hitBox.pageX + 24)) 
+        console.log(gestureData,hitLetterBox)
+        if (hitLetterBox && hitLetterBox.letterValue == this.props.letter) {
+            this.props.addCorralledLetter(hitLetterBox.id)
+        } else {
+            console.log("no match")
+        }
+        // return gestureData.pageY > (this.props.letterHitBoxes[0].pageY - 50) && gestureData.pageY < (this.props.letterHitBoxes[0].pageY + 50)
+        // let DZs = this.props.letterHitboxes;
+        // return gesture.moveY > dz.y && gesture.moveY < dz.y + dz.height;
+    }
 
-      getWomped = () => {
-          this._getWomped.start()
-          setTimeout(()=>this._womped=true,1000)
-      }
-
-      getRandomInt = (max) => {
-        let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
-          return Math.floor(Math.random() * Math.floor(max)) * plusOrMinus
-      }
-
-      animValueHelper = () => {
-        let animObj = {x:this.getRandomInt(200), y:this.getRandomInt(300)}
-        return animObj
-      }
-
+    
       render() { 
+        
+
         const  animatedStyle = {
           transform: this._animatedValue.getTranslateTransform()
         }  
-        const wompedStyle = {
-            transform:this._wompedAnim.getTranslateTransform()
-        }
-      return (<Animated.View {...this._panResponder.panHandlers} style={[animatedStyle,wompedStyle]}>
-            <Text style={styles.text}>{this.props.letter}</Text>
+        
+      return (<Animated.View style={styles.text} {...this._panResponder.panHandlers} style={[animatedStyle]}>
+            <Text ref={(ref) => { this.marker = ref }} style={styles.text}>{this.props.letter}</Text>
           </Animated.View>
       );
     }
@@ -102,9 +98,20 @@ class Draggable extends React.Component {
 const styles = StyleSheet.create({
  
     text: {
-      fontSize: 80
+      fontSize: 80,
+      zIndex:99
     },
    
   });
 
-export default Draggable
+const mapDispatchToProps = (dispatch) => {
+    return {addCorralledLetter: payload => dispatch({type:"ADD_CORRALLED_LETTER",payload})}
+}
+
+const mapStateToProps = (state,ownProps) => {
+    return {letter: ownProps.letter,
+            letterHitBoxes: state.letterHitBoxes,
+            id:ownProps.id}
+}
+ 
+ export default connect(mapStateToProps,mapDispatchToProps)(Draggable);
