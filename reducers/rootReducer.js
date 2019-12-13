@@ -35,6 +35,15 @@ function rootReducer(state=initState(),action){
         return {...state, womped:!state.womped}
     case "ADD_WOMPED_LETTER_Y":
         return {...state, wompedLettersY:state.wompedLettersY.concat(action.payload)}
+
+    case "UPDATE_SELECTED_WORD":
+        return {...state, selectedWord:action.payload}   
+    case "NUKE_THE_STORE":
+        return {...state,
+        corralledLetters:[],
+        womped:false,
+        wompedLettersY:[],
+        corralledLetters:[],} 
     default:
         return state
     }

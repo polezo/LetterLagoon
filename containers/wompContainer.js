@@ -10,7 +10,8 @@ class WompContainer extends React.Component {
 
   constructor(props) {
     super(props);
-    this.addTheStupidBox ={}
+    // this.addTheStupidBox ={}
+    this.wompedLettersY=[]
     this.hitBoxRef = React.createRef()
     this.id = uuid()
     this._wompedAnim = new Animated.ValueXY()
@@ -28,12 +29,14 @@ class WompContainer extends React.Component {
   componentDidMount() {
     setTimeout(this.getWomped,2000)
     setTimeout(this.addTheDamnBox,500)
+    // this.props.nukeTheStore()
     
 
 }
 
 addTheDamnBox = () => {
-    this.props.addHitBox(this.addTheStupidBox)
+    if (this.addTheStupidBox) {
+    this.props.addHitBox(this.addTheStupidBox)}
 }
 
 getWomped = () => {
@@ -58,7 +61,7 @@ animValueHelper = () => {
 
 animBumperHelper = (bumperY) => {
     let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
-    let conflict = this.props.wompedLettersY.find((y)=> {
+    let conflict = this.wompedLettersY.find((y)=> {
         if (y <= (bumperY+60) && y >= (bumperY-60)) {
             return y
         }
@@ -67,7 +70,7 @@ animBumperHelper = (bumperY) => {
         if (bumperY < 200) {
             bumperY = bumperY + (70)}
         else bumperY = bumperY + (70*plusOrMinus)}
-    this.props.addWompedLetterY(bumperY)
+    this.wompedLettersY.push(bumperY)
     return bumperY
 }
 

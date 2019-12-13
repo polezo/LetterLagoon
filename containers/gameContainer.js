@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Animated, PanResponder,findNodeHandle } from 'r
 import uuid from 'react-uuid'
 import { connect } from 'react-redux'
 import WompContainer from "./wompContainer"
+import sample from "lodash/sample"
 
 class GameContainer extends React.Component {
 
@@ -14,15 +15,33 @@ class GameContainer extends React.Component {
   componentDidMount = () => {
 
   }
- 
+
+
   shouldComponentUpdate(nextProps,nextState) {
+    if (nextProps.wordSpelled) {
+      
+        return true
+      }
+      
     return false
     }
-      render() {
+      
+    wordRenderHelper = () => {
+      if (this.props.corralledLetters.length === this.props.selectedWord.length) {
+      let newWord = sample(this.props.allWords)
+      this.props.updateSelectedWord(newWord)
+      this.props.nukeTheStore()
+      return newWord
+    }
+     
+      return this.props.selectedWord
+    }
+    
+    render() {
         
 
       return (<View style={styles.container} >
-      {this.props.selectedWord.split("").map((letter,i)=>{
+      {this.wordRenderHelper().split("").map((letter,i)=>{
         let id=uuid()
         let letterId=uuid()
       return <View key={uuid()} ><WompContainer key={id} id={id} letterId={letterId} letter={letter}/></View>})}
@@ -56,6 +75,11 @@ class GameContainer extends React.Component {
 
   });
   
+
+const mapDispatchToProps = (dispatch) =>{
+  return {updateSelectedWord:(payload)=>dispatch({type:"UPDATE_SELECTED_WORD",payload}),
+          nukeTheStore:()=>dispatch({type:"NUKE_THE_STORE"})}
+}
 const select = (state) => {
    return {selectedWord: state.selectedWord,
           corralledLetters: state.corralledLetters,
@@ -64,4 +88,4 @@ const select = (state) => {
         }
 }
 
-export default connect(select)(GameContainer);
+export default connect(select,mapDispatchToProps)(GameContainer);
