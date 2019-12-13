@@ -6,9 +6,10 @@ function initState () {
         level:0,
         misses:0,
         allWords:[],
-        selectedWord:"START",
+        selectedWord:"JULIA",
         letterHitBoxes:[],
-        corralledLetters:[]
+        corralledLetters:[],
+        womped:false
     }
 }
 
@@ -17,10 +18,19 @@ function rootReducer(state=initState(),action){
     case "ADD_LETTER_HITBOX":
         if (state.letterHitBoxes.find(hitbox=>action.payload.pageX === hitbox.pageX && hitbox.pageY === action.payload.pageY)){
         return state
-    } else {
-        return {...state, letterHitBoxes: [...state.letterHitBoxes,action.payload]}}
+        }
+        return {...state, letterHitBoxes: [...state.letterHitBoxes,action.payload]}
+    
+        case "REMOVE_LETTER_HITBOX":
+        let arr = [...state.letterHitBoxes]
+        return {...state, letterHitBoxes: arr.filter((hitbox)=>action.payload!==hitbox.id)}
+        
     case "ADD_CORRALLED_LETTER":
+        if (state.corralledLetters.find(letter=>action.payload.hitLetterBox===letter.hitLetterBox)){
+            return state}
         return {...state, corralledLetters:state.corralledLetters.concat(action.payload)}
+    case "TOGGLE_WOMPED":
+        return {...state, womped:!state.womped}
     default:
         return state
     }

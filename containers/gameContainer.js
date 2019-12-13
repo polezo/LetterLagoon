@@ -24,7 +24,8 @@ class GameContainer extends React.Component {
       return (<View style={styles.container} >
       {this.props.selectedWord.split("").map((letter,i)=>{
         let id=uuid()
-      return <View key={uuid()} style={styles[`zIndex0`]} ><Text>{letter}</Text><WompContainer key={id} id={id} letter={letter}/></View>})}
+        let letterId=uuid()
+      return <View key={uuid()} ><WompContainer key={id} id={id} letterId={letterId} letter={letter}/></View>})}
          
         </View>
       );
@@ -40,7 +41,10 @@ class GameContainer extends React.Component {
         flexDirection:'row', 
       },
       text: {
-        fontSize: 80
+        textAlign:'center',
+        fontSize:80,
+        // position:"absolute",
+        // bottom:80
       },
       testColor: {
         backgroundColor:'green'

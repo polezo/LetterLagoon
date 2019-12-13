@@ -10,7 +10,7 @@ class Draggable extends React.Component {
         super(props);
         this.marker = React.createRef();
         this.state = {womped:false}
-        
+        this.thing = null
       
         this._value= {x:0,y:0}
         this._animatedValue = new Animated.ValueXY()
@@ -68,19 +68,35 @@ class Draggable extends React.Component {
 
       isDropZone = (gestureData) => {
        
-        let hitLetterBox = this.props.letterHitBoxes.find(hitBox => gestureData.pageY > (hitBox.pageY - 50) && gestureData.pageY < (hitBox.pageY + 50) && gestureData.pageX > (hitBox.pageX - 24) && gestureData.pageX < (hitBox.pageX + 24)) 
+        let hitLetterBox = this.props.letterHitBoxes.find(hitBox => gestureData.pageY > (hitBox.pageY - 50) && gestureData.pageY < (hitBox.pageY + 50) && gestureData.pageX > (hitBox.pageX - 27) && gestureData.pageX < (hitBox.pageX + 27)) 
         console.log(gestureData,hitLetterBox)
         if (hitLetterBox && hitLetterBox.letterValue == this.props.letter) {
-            this.props.addCorralledLetter(hitLetterBox.id)
+            this.props.addCorralledLetter({hitLetterBox:hitLetterBox.id,hitLetter:this.props.id,actualLetter:this.props.letter})
+            this.props.toggleWomped()
+            this.props.removeLetterHitbox(hitLetterBox.id)
         } else {
-            console.log("no match")
+            Animated.spring(this._animatedValue, {
+                toValue: { x: 0, y: 0 },
+                friction: 5
+              }).start();
         }
         // return gestureData.pageY > (this.props.letterHitBoxes[0].pageY - 50) && gestureData.pageY < (this.props.letterHitBoxes[0].pageY + 50)
         // let DZs = this.props.letterHitboxes;
         // return gesture.moveY > dz.y && gesture.moveY < dz.y + dz.height;
     }
 
+    LCidChecker = (id) => {
+        if (id){
+        if (id === this.props.id) {
+        return false}}
+        return true
     
+    }
+    stylesHelper = () => {
+        if (this.props.cloneCorralled && !this.props.letterCorralled) {
+            return styles.wompedText
+        }
+    }
       render() { 
         
 
@@ -88,30 +104,47 @@ class Draggable extends React.Component {
           transform: this._animatedValue.getTranslateTransform()
         }  
         
-      return (<Animated.View style={styles.text} {...this._panResponder.panHandlers} style={[animatedStyle]}>
-            <Text ref={(ref) => { this.marker = ref }} style={styles.text}>{this.props.letter}</Text>
+      return (<Animated.View style={[styles.view,this.stylesHelper()]} {...this._panResponder.panHandlers} style={[animatedStyle]}>
+            {!this.props.letterCorralled && <Text ref={(ref) => { this.marker = ref }} style={[styles.text,this.stylesHelper()]}>{this.props.letter}</Text>}
           </Animated.View>
       );
     }
 }
 
+
 const styles = StyleSheet.create({
  
-    text: {
+    view: {
+    
       fontSize: 80,
-      zIndex:99
+      textAlign:'center'
     },
+    text:{
+        flex:-1,
+        fontSize: 80,
+        textAlign:'center'
+    },
+    wompedText: {
+        position:'absolute',
+        bottom:"1%"
+        
+    }
    
   });
 
 const mapDispatchToProps = (dispatch) => {
-    return {addCorralledLetter: payload => dispatch({type:"ADD_CORRALLED_LETTER",payload})}
+    return {addCorralledLetter: payload => dispatch({type:"ADD_CORRALLED_LETTER",payload}),
+            toggleWomped:() => dispatch({type:"TOGGLE_WOMPED"}),
+            removeLetterHitbox:(payload)=>dispatch({type:"REMOVE_LETTER_HITBOX",payload})}
 }
 
 const mapStateToProps = (state,ownProps) => {
     return {letter: ownProps.letter,
             letterHitBoxes: state.letterHitBoxes,
-            id:ownProps.id}
+            id:ownProps.id,
+            letterCorralled:state.corralledLetters.find(letter=>letter.hitLetter===ownProps.id),
+            womped:state.womped,
+            cloneCorralled:state.corralledLetters.find(letter=>letter.actualLetter===ownProps.letter)}
 }
  
  export default connect(mapStateToProps,mapDispatchToProps)(Draggable);

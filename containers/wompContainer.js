@@ -12,7 +12,7 @@ class WompContainer extends React.Component {
     super(props);
     this.addTheStupidBox ={}
     this.hitBoxRef = React.createRef()
-    
+    this.id = uuid()
     this._wompedAnim = new Animated.ValueXY()
     this._getWomped = Animated.spring(
         this._wompedAnim, {
@@ -28,6 +28,7 @@ class WompContainer extends React.Component {
   componentDidMount() {
     setTimeout(this.getWomped,2000)
     setTimeout(this.addTheDamnBox,500)
+    
 
 }
 
@@ -37,32 +38,41 @@ addTheDamnBox = () => {
 
 getWomped = () => {
     this._getWomped.start()
-    setTimeout(()=>this._womped=true,1000)
+    // setTimeout(this.props.toggleWomped,500)
 }
 
-getRandomInt = (max) => {
+getRandomIntX = (max) => {
   let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
-    return Math.floor(Math.random() * Math.floor(max)+50) * plusOrMinus
+    return Math.floor(Math.random() * Math.floor(max)+20) * plusOrMinus
 }
+
+getRandomIntY = (max) => {
+    let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+      return Math.floor(Math.random() * Math.floor(max)+60) * plusOrMinus
+  }
 
 animValueHelper = () => {
-  let animObj = {x:this.getRandomInt(200), y:this.getRandomInt(300)}
+  let animObj = {x:this.getRandomIntX(200)+20, y:this.getRandomIntY(300)}
   return animObj
 }
 
 setLetterHitBoxes = (x, y, width, height, pageX, pageY,letterValue,id) => {
     let hitBox = {x, y, width, height, pageX, pageY,letterValue,id}
     // this._setHitBox = hitBox;
-    this.addTheStupidBox = hitBox
-    
-    
+    this.addTheStupidBox = hitBox 
+}
+
+styleHelper = () => {
+    if (!this.props.letterCorralled && this.props.cloneCorralled) {
+        return {bottom:42}
+    }
 }
 
 render(){
-   
     const wompedStyle = {
         // backgroundColor:'rgba(34, 139, 52, 0.8)',
-        transform:this._wompedAnim.getTranslateTransform()
+        transform:this._wompedAnim.getTranslateTransform(),
+        flex:-1
     }
     return <View style={this.props.letterCorralled ? styles.testColorHit : styles.testColor}ref={(ref) => { this.marker = ref }}
     onLayout={({nativeEvent}) => {
@@ -71,26 +81,15 @@ render(){
                   this.setLetterHitBoxes(x, y, width, height, pageX, pageY,this.props.letter,this.props.id);
          })
       
-    }} ><Animated.View style={wompedStyle} >
-            <Draggable letter={this.props.letter} />
-            </Animated.View></View>
+        }} >{this.props.letterCorralled&&<Text style={styles.text2}>{this.props.letter}</Text>}<Animated.View style={wompedStyle} >
+            <Draggable letter={this.props.letter} id={this.props.letterId} 
+            // LCid={this.props.letterCorralled ? this.props.letterCorralled.hitLetter:null}
+            />
+            </Animated.View><Text style={[styles.text,this.styleHelper()]}>_</Text></View>
 }
 
 }
 
-// mapStateToProps = (props,ownProps) => {
-//     return { letter: ownProps.letter}
-// }
-
-mapDispatchToProps = (dispatch) => {
-    return { addHitBox:(positionInfoObj) => dispatch({type:"ADD_LETTER_HITBOX",payload:positionInfoObj,
-              removeHitBox:()=> dispatch({type:"REMOVE_LETTER_HITBOX"}) })}
-}
-
-mapStateToProps = (state,ownProps) => {
-    return {letter: ownProps.letter,
-        letterCorralled: state.corralledLetters.includes(ownProps.id)}
-}
 
 const styles = StyleSheet.create({
     container: {
@@ -101,13 +100,38 @@ const styles = StyleSheet.create({
       flexDirection:'row', 
     },
     text: {
-      fontSize: 80
+        bottom:90,
+        fontSize: 80,
+        textAlign:'center'
+    },
+    text2: {
+        
+        fontSize: 80,
+        textAlign:'center'
     },
     testColor: {
-      backgroundColor:'rgba(0, 255, 0, 0.3)',
+        width:72,
+    //   backgroundColor:'rgba(0, 255, 0, 0.3)',
     },
     testColorHit:{
-      backgroundColor:'rgba(255, 0, 0, 0.3)',
+        width:72,
+        height:100,
+        bottom:46,
+      backgroundColor:'rgba(238, 232, 170, 0.8)',
   }});
+
+  mapDispatchToProps = (dispatch) => {
+    return { addHitBox:(positionInfoObj) => dispatch({type:"ADD_LETTER_HITBOX",payload:positionInfoObj}),
+            toggleWomped:() => dispatch({type:"TOGGLE_WOMPED"}) 
+            }}
+
+mapStateToProps = (state,ownProps) => {
+    return {letter: ownProps.letter,
+        letterCorralled: state.corralledLetters.find(corralledLetter=>corralledLetter.hitLetterBox===ownProps.id),
+        letterId:ownProps.letterId,
+        womped:state.womped,
+        cloneCorralled:state.corralledLetters.find(letter=>letter.actualLetter===ownProps.letter)
+        }
+}
 
 export default connect(mapStateToProps,mapDispatchToProps)(WompContainer)
