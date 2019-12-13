@@ -58,7 +58,10 @@ class GameContainer extends React.Component {
   
 const select = (state) => {
    return {selectedWord: state.selectedWord,
-          corralledLetters: state.corralledLetters}
+          corralledLetters: state.corralledLetters,
+          allWords: state.allWords,
+          wordSpelled:(state.letterHitBoxes.length == 0 ? true : false)
+        }
 }
 
 export default connect(select)(GameContainer);

@@ -43,17 +43,32 @@ getWomped = () => {
 
 getRandomIntX = (max) => {
   let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
-    return Math.floor(Math.random() * Math.floor(max)+20) * plusOrMinus
+    return Math.floor(Math.random() * Math.floor(max)+38) * plusOrMinus
 }
 
 getRandomIntY = (max) => {
     let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
-      return Math.floor(Math.random() * Math.floor(max)+60) * plusOrMinus
+      return Math.floor(Math.random() * Math.floor(max)+130) * plusOrMinus
   }
 
 animValueHelper = () => {
-  let animObj = {x:this.getRandomIntX(200)+20, y:this.getRandomIntY(300)}
+  let animObj = {x:this.getRandomIntX(125), y:this.animBumperHelper(this.getRandomIntY(210))}
   return animObj
+}
+
+animBumperHelper = (bumperY) => {
+    let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+    let conflict = this.props.wompedLettersY.find((y)=> {
+        if (y <= (bumperY+60) && y >= (bumperY-60)) {
+            return y
+        }
+    })
+    if (conflict) {
+        if (bumperY < 200) {
+            bumperY = bumperY + (70)}
+        else bumperY = bumperY + (70*plusOrMinus)}
+    this.props.addWompedLetterY(bumperY)
+    return bumperY
 }
 
 setLetterHitBoxes = (x, y, width, height, pageX, pageY,letterValue,id) => {
@@ -122,7 +137,8 @@ const styles = StyleSheet.create({
 
   mapDispatchToProps = (dispatch) => {
     return { addHitBox:(positionInfoObj) => dispatch({type:"ADD_LETTER_HITBOX",payload:positionInfoObj}),
-            toggleWomped:() => dispatch({type:"TOGGLE_WOMPED"}) 
+            toggleWomped:() => dispatch({type:"TOGGLE_WOMPED"}),
+            addWompedLetterY:(payload)=> dispatch({type:"ADD_WOMPED_LETTER_Y",payload:payload}) 
             }}
 
 mapStateToProps = (state,ownProps) => {
@@ -130,7 +146,8 @@ mapStateToProps = (state,ownProps) => {
         letterCorralled: state.corralledLetters.find(corralledLetter=>corralledLetter.hitLetterBox===ownProps.id),
         letterId:ownProps.letterId,
         womped:state.womped,
-        cloneCorralled:state.corralledLetters.find(letter=>letter.actualLetter===ownProps.letter)
+        cloneCorralled:state.corralledLetters.find(letter=>letter.actualLetter===ownProps.letter),
+        wompedLettersY:state.wompedLettersY
         }
 }
 
