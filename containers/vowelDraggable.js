@@ -3,7 +3,7 @@ import { StyleSheet, Text, Animated, PanResponder } from 'react-native';
 import {connect} from 'react-redux'
 
 
-class Draggable extends React.Component {
+class VowelDraggable extends React.Component {
     
 
     constructor(props) {
@@ -62,14 +62,20 @@ class Draggable extends React.Component {
         });
       }
 
-    //   shouldComponentUpdate(nextProps,nextState) {
-    //       return false
-    //   }
+ 
+
+
+          
+
+    //     }
 
       checkGameState = () => {
         if (this.props.wordSpelled) {
-            setTimeout(()=>this.props.addWordToSpelled(this.props.selectedWord),1500)
-            
+            setTimeout(()=>{
+                this.props.addWordToSpelled(this.props.selectedWord)
+                
+            },1500
+            )
           }
       }
 
@@ -82,6 +88,7 @@ class Draggable extends React.Component {
             this.props.toggleWomped()
             this.props.removeLetterHitbox(hitLetterBox.id)
             this.checkGameState()
+            
 
         } else {
             Animated.spring(this._animatedValue, {
@@ -103,7 +110,7 @@ class Draggable extends React.Component {
     }
     stylesHelper = () => {
         if (this.props.cloneCorralled && !this.props.letterCorralled) {
-            return styles.wompedText
+            
         }
     }
       render() { 
@@ -113,8 +120,8 @@ class Draggable extends React.Component {
           transform: this._animatedValue.getTranslateTransform()
         }  
         
-      return (<Animated.View style={[styles.view,this.stylesHelper()]} {...this._panResponder.panHandlers} style={[animatedStyle]}>
-            {!this.props.letterCorralled && <Text ref={(ref) => { this.marker = ref }} style={[styles.text,this.stylesHelper()]}>{this.props.letter}</Text>}
+      return (<Animated.View style={[styles.view,]} {...this._panResponder.panHandlers} style={[animatedStyle]}>
+            {!this.props.letterCorralled && <Text ref={(ref) => { this.marker = ref }} style={[styles.text,]}>{this.props.letter}</Text>}
           </Animated.View>
       );
     }
@@ -129,13 +136,13 @@ const styles = StyleSheet.create({
       textAlign:'center'
     },
     text:{
-        flex:-1,
+        // flex:-1,
         fontSize: 80,
         textAlign:'center'
     },
     wompedText: {
-        position:'absolute',
-        bottom:"1%"
+        // position:'absolute',
+        
         
     }
    
@@ -159,4 +166,4 @@ const mapStateToProps = (state,ownProps) => {
             selectedWord:state.selectedWord}
 }
  
- export default connect(mapStateToProps,mapDispatchToProps)(Draggable);
+ export default connect(mapStateToProps,mapDispatchToProps)(VowelDraggable);

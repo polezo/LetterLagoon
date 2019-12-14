@@ -1,12 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View, Animated } from 'react-native';
-import Draggable from './draggable'
+import VowelDraggable from './vowelDraggable'
 import uuid from 'react-uuid'
 import { connect } from 'react-redux'
+import sample from 'lodash/sample'
 
 
 
-class WompContainer extends React.Component {
+class VowelWomper extends React.Component {
 
   constructor(props) {
     super(props);
@@ -46,7 +47,7 @@ getWomped = () => {
 
 getRandomIntX = (max) => {
   let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
-    return Math.floor(Math.random() * Math.floor(max)+38) * plusOrMinus
+    return Math.floor(Math.random() * Math.floor(max)+50) * plusOrMinus
 }
 
 getRandomIntY = (max) => {
@@ -86,24 +87,45 @@ styleHelper = () => {
     }
 }
 
+vowelTest = (s) => {
+    return (/^[aeiou]$/i).test(s);
+  }
+
+
 render(){
     const wompedStyle = {
         // backgroundColor:'rgba(34, 139, 52, 0.8)',
         transform:this._wompedAnim.getTranslateTransform(),
         flex:-1
     }
+
+    const randomWompedStyle = {
+        // backgroundColor:'rgba(34, 139, 52, 0.8)',
+        transform:this._wompedAnim.getTranslateTransform(),
+        flex:-1,
+        // position:"absolute",
+        // bottom:400
+    }
+
+    const notWomped = {
+        flex:-1,
+        // position:"absolute"
+    }
+
     return <View style={this.props.letterCorralled ? styles.testColorHit : styles.testColor}ref={(ref) => { this.marker = ref }}
     onLayout={({nativeEvent}) => {
-    
+        if (this.vowelTest(this.props.letter))
         this.marker.measure((x, y, width, height, pageX, pageY) => {
                   this.setLetterHitBoxes(x, y, width, height, pageX, pageY,this.props.letter,this.props.id);
          })
       
-        }} >{this.props.letterCorralled&&<Text style={styles.text2}>{this.props.letter}</Text>}<Animated.View style={wompedStyle} >
-            <Draggable letter={this.props.letter} id={this.props.letterId} 
+        }} >{this.props.letterCorralled&&<Text style={styles.text2}>{this.props.letter}</Text>}<Animated.View style={this.vowelTest(this.props.letter) ?randomWompedStyle : notWomped} >
+            <VowelDraggable letter={this.props.letter} id={this.props.letterId} 
             // LCid={this.props.letterCorralled ? this.props.letterCorralled.hitLetter:null}
             />
-            </Animated.View><Text style={[styles.text,this.styleHelper()]}>_</Text></View>
+            </Animated.View><Text style={[styles.text,]}>_</Text><Animated.View style={randomWompedStyle} >
+           
+            </Animated.View></View>
 }
 
 }
@@ -154,4 +176,4 @@ mapStateToProps = (state,ownProps) => {
         }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(WompContainer)
+export default connect(mapStateToProps,mapDispatchToProps)(VowelWomper)

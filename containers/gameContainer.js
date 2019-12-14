@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Animated, PanResponder,findNodeHandle } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import uuid from 'react-uuid'
 import { connect } from 'react-redux'
 import WompContainer from "./wompContainer"
@@ -18,7 +18,7 @@ class GameContainer extends React.Component {
 
 
   shouldComponentUpdate(nextProps,nextState) {
-    if (nextProps.wordSpelled) {
+    if (this.props.level != nextProps.level) {
       
         return true
       }
@@ -84,7 +84,8 @@ const select = (state) => {
    return {selectedWord: state.selectedWord,
           corralledLetters: state.corralledLetters,
           allWords: state.allWords,
-          wordSpelled:(state.letterHitBoxes.length == 0 ? true : false)
+          wordSpelled:(state.letterHitBoxes.length == 0 ? true : false),
+          level:state.level
         }
 }
 

@@ -3,15 +3,16 @@
 
 function initState () {
     return {
-        level:0,
         misses:0,
-        allWords:["but", "very", "not", "it", "nice", "kick", "bike", "go", "ball", "he", "be", "make", "happy", "play", "eat", "pizza",
-            "pig", "cat", "dog", "bat", "big", "red", "yes", "fat", "sit", "big", "wig", "mad", "sad", "van", "gum", "hen", "map", "egg", "cow", "car", "hat", "man", "can", "rat", "bus", "bag", "ant", "cut", "log", "win", "mom", "dad", "bug", "sun", "nut", "net", "her", "and", "ran"],
-        selectedWord:"GIRAFFE",
+        level:0,
+        allWords:["BUT", "VERY", "NOT", "IT", "NICE", "KICK", "BIKE", "GO", "BALL", "HE", "BE", "MAKE", "HAPPY", "PLAY", "EAT", "PIZZA",
+            "PIG", "CAT", "DOG", "BAT", "BIG", "RED", "YES", "FAT", "SIT", "BIG", "WIG", "MAD", "SAD", "VAN", "GUM", "HEN", "MAP", "EGG", "COW", "CAR", "HAT", "MAN", "CAN", "RAT", "BUS", "BAG", "ANT", "CUT", "LOG", "WIN", "MOM", "DAD", "BUG", "SUN", "NUT", "NET", "HER", "AND", "RAN"],
+        selectedWord:"START",
         letterHitBoxes:[],
         corralledLetters:[],
         womped:false,
         wompedLettersY:[],
+        spelledWords:[]
     }
 }
 
@@ -44,6 +45,9 @@ function rootReducer(state=initState(),action){
         womped:false,
         wompedLettersY:[],
         corralledLetters:[],} 
+    case "ADD_WORD_TO_SPELLED":
+        return {...state,spelledWords:(state.spelledWords.concat(action.payload)),
+        level:state.level+1}
     default:
         return state
     }
