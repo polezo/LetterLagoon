@@ -44,7 +44,7 @@ class GameContainer extends React.Component {
       {this.wordRenderHelper().split("").map((letter,i)=>{
         let id=uuid()
         let letterId=uuid()
-      return <View key={uuid()} ><WompContainer key={id} id={id} letterId={letterId} letter={letter}/></View>})}
+      return <View key={uuid()} ><WompContainer i={i}key={id} id={id} letterId={letterId} letter={letter}/></View>})}
          
         </View>
       );

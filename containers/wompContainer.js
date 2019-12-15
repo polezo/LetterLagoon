@@ -44,18 +44,62 @@ getWomped = () => {
     // setTimeout(this.props.toggleWomped,500)
 }
 
-getRandomIntX = (max) => {
-  let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
-    return Math.floor(Math.random() * Math.floor(max)+38) * plusOrMinus
+levelRotate = () => {
+    switch (this.props.level % 4) {
+        case 1: 
+            return {"x":-1,"y":1}
+        case 2: 
+            return {"x":1,"y":1}
+        case 3:
+            return {"x":1,"y":-1}
+        case 0:
+            return {"x":-1,"y":-1}
+    }
 }
 
-getRandomIntY = (max) => {
-    let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
-      return Math.floor(Math.random() * Math.floor(max)+130) * plusOrMinus
+//make these not random then record some words/letters
+getRandomIntY = (i) => {
+    let maxLength = Math.floor(Math.random() * Math.floor(200)+150)
+    
+    switch (i % 4) {
+        case 0:
+            return maxLength * this.levelRotate()["y"]
+        case 1: 
+            return maxLength * this.levelRotate()["y"]
+        case 2:
+            return -maxLength * this.levelRotate()["y"]
+        case 3: 
+            return -maxLength * this.levelRotate()["y"]
+        default:
+            return maxLength
+    }
+    
+//   let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+//     return Math.floor(Math.random() * Math.floor(max)+38) * plusOrMinus
+}
+
+getRandomIntX = (i,plusOrMinus) => {
+    let maxLength = Math.floor(Math.random() * Math.floor(60)+90)
+    
+    switch (i % 4) {
+        case  0:
+            return -maxLength * this.levelRotate()["x"]
+        case 1:
+            return maxLength * this.levelRotate()["x"]
+        case 2:
+            return maxLength * this.levelRotate()["x"]
+        case 3: 
+            return -maxLength * this.levelRotate()["x"]
+        default: 
+            return maxLength
+    }
+    // let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
+    //   return Math.floor(Math.random() * Math.floor(max)+130) * plusOrMinus
   }
 
 animValueHelper = () => {
-  let animObj = {x:this.getRandomIntX(125), y:this.animBumperHelper(this.getRandomIntY(210))}
+    
+  let animObj = {x:this.getRandomIntX(this.props.i), y:this.animBumperHelper(this.getRandomIntY(this.props.i))}
   return animObj
 }
 
@@ -87,6 +131,7 @@ styleHelper = () => {
 }
 
 render(){
+    
     const wompedStyle = {
         // backgroundColor:'rgba(34, 139, 52, 0.8)',
         transform:this._wompedAnim.getTranslateTransform(),
@@ -150,7 +195,8 @@ mapStateToProps = (state,ownProps) => {
         letterId:ownProps.letterId,
         womped:state.womped,
         cloneCorralled:state.corralledLetters.find(letter=>letter.actualLetter===ownProps.letter),
-        wompedLettersY:state.wompedLettersY
+        wompedLettersY:state.wompedLettersY,
+        level:state.level
         }
 }
 
