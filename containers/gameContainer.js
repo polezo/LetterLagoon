@@ -5,15 +5,16 @@ import { connect } from 'react-redux'
 import WompContainer from "./wompContainer"
 import sample from "lodash/sample"
 import { Audio } from 'expo-av'
+import paths from '../assets/wordsJson'
 
 class GameContainer extends React.Component {
 
   constructor(props) {
     super(props);
     this.refsArray = this.props.selectedWord.split("").map(()=>React.createRef())
-    
+    this.narratorSound = null
     this.letsStart = null;
-    
+    this.spellTheWord = null;
   }
 
   componentDidMount = () => {
@@ -67,8 +68,9 @@ class GameContainer extends React.Component {
       );
 
   //  Save the response of sound in playbackInstance
-    
+        
       this.narratorSound = sound;
+      
       this.narratorSound.setOnPlaybackStatusUpdate(this._onPlaybackStatusUpdate);
 
   //  Play the Music
@@ -88,14 +90,63 @@ class GameContainer extends React.Component {
   
             };
 
-     const { sound2, status2 } =  Audio.Sound.createAsync(
+     Audio.Sound.createAsync(
        source2,
        initialStatus2
-  );
+      );
 
     }
   }
+
+  _spellTheWordDone = playbackStatus => {
+    if (playbackStatus.didJustFinish) {
+      const source3 = paths()[`${this.props.selectedWord}`];
+      console.log(source3)
+      console.log("hello from _spelltheword")
+      const initialStatus2 = {
+        //        Play by default
+                  shouldPlay: true,
+   
+             };
+ 
+      Audio.Sound.createAsync(
+        source3,
+        initialStatus2
+       );
+    }
+  }
+
+  componentDidUpdate = () => {
+    if (this.props.level > 1 && this.props.level < 7) {
+      
+      this._loadAnotherPlaybackInstance(true);
+  }}
     
+  async _loadAnotherPlaybackInstance() {
+    if (this.spellTheWord != null) {
+      await this.spellTheWord.unloadAsync();
+      this.spellTheWord.setOnPlaybackStatusUpdate(null);
+      this.spellTheWord = null;
+   }
+    const source2 = require('../assets/Narration/9-SpellTheWord.mp3');
+    const initialStatus2 = {
+      //        Play by default
+                shouldPlay: false,
+ 
+           };
+
+    const { sound, status } = await Audio.Sound.createAsync(
+      source2,
+      initialStatus2
+     );
+
+     this.spellTheWord = sound
+     this.spellTheWord.setOnPlaybackStatusUpdate(this._spellTheWordDone);
+     this.spellTheWord.playAsync()
+   }
+    
+  
+
   componentWillUnmount() {
     this.narratorSound.unloadAsync();
 //  Check Your Console To verify that the above line is working
