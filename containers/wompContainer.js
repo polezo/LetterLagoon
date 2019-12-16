@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Animated } from 'react-native';
 import Draggable from './draggable'
 import uuid from 'react-uuid'
 import { connect } from 'react-redux'
+import sample from 'lodash/sample'
 
 
 
@@ -45,7 +46,7 @@ getWomped = () => {
 }
 
 levelRotate = () => {
-    switch (this.props.level % 4) {
+    switch ((this.props.level+this.props.rotationSkipper) % 4) {
         case 1: 
             return {"x":-1,"y":1}
         case 2: 
@@ -99,24 +100,10 @@ getRandomIntX = (i,plusOrMinus) => {
 
 animValueHelper = () => {
     
-  let animObj = {x:this.getRandomIntX(this.props.i), y:this.animBumperHelper(this.getRandomIntY(this.props.i))}
+  let animObj = {x:this.getRandomIntX(this.props.i) * this.props.x, y:this.getRandomIntY(this.props.i)* this.props.x}
   return animObj
 }
 
-animBumperHelper = (bumperY) => {
-    let plusOrMinus = Math.random() < 0.5 ? -1 : 1;
-    let conflict = this.wompedLettersY.find((y)=> {
-        if (y <= (bumperY+60) && y >= (bumperY-60)) {
-            return y
-        }
-    })
-    if (conflict) {
-        if (bumperY < 200) {
-            bumperY = bumperY + (70)}
-        else bumperY = bumperY + (70*plusOrMinus)}
-    this.wompedLettersY.push(bumperY)
-    return bumperY
-}
 
 setLetterHitBoxes = (x, y, width, height, pageX, pageY,letterValue,id) => {
     let hitBox = {x, y, width, height, pageX, pageY,letterValue,id}
@@ -196,7 +183,9 @@ mapStateToProps = (state,ownProps) => {
         womped:state.womped,
         cloneCorralled:state.corralledLetters.find(letter=>letter.actualLetter===ownProps.letter),
         wompedLettersY:state.wompedLettersY,
-        level:state.level
+        level:state.level,
+        x:ownProps.x,
+        rotationSkipper:ownProps.rotationSkipper
         }
 }
 
