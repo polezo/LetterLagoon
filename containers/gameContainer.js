@@ -101,8 +101,6 @@ class GameContainer extends React.Component {
   _spellTheWordDone = playbackStatus => {
     if (playbackStatus.didJustFinish) {
       const source3 = paths()[`${this.props.selectedWord}`];
-      console.log(source3)
-      console.log("hello from _spelltheword")
       const initialStatus2 = {
         //        Play by default
                   shouldPlay: true,
@@ -149,8 +147,8 @@ class GameContainer extends React.Component {
 
   componentWillUnmount() {
     this.narratorSound.unloadAsync();
-//  Check Your Console To verify that the above line is working
-    console.log('unmount');
+    this.spellTheWord.unloadAsync()
+
 }
 
     wordRenderHelper = () => {

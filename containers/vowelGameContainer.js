@@ -1,28 +1,76 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import uuid from 'react-uuid'
 import { connect } from 'react-redux'
 import VowelWomper from "./vowelWomper"
 import sample from "lodash/sample"
 import VowelDraggable from './vowelDraggable'
-
+import { Audio } from 'expo-av'
+import paths from '../assets/wordsJson'
 
 class VowelGameContainer extends React.Component {
 
   constructor(props) {
     super(props);
     this.refsArray = this.props.selectedWord.split("").map(()=>React.createRef())
+    this.narratorSound = null
   }
 
   componentDidMount = () => {
-
+    Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+        interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+        playsInSilentModeIOS: true,
+        shouldDuckAndroid: true,
+        interruptionModeAndroid:          Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+        playThroughEarpieceAndroid: false,
+    });
+  //  This function will be called
+    this._loadNewPlaybackInstance(true);
   }
 
   vowelTest = (s) => {
     return (/^[aeiou]$/i).test(s);
   }
 
+  async _loadNewPlaybackInstance(playing) {
+    if (this.narratorSound != null) {
+        await this.narratorSound.unloadAsync();
+        this.narratorSound.setOnPlaybackStatusUpdate(null);
+        this.narratorSound = null;
+     }
 
+     const source = require('../assets/Narration/FindTheVowelsFor.mp3');
+
+     const initialStatus = {
+//        Play by default
+          shouldPlay: false,
+//        Control the speed
+          rate: 1.0,
+//        Correct the pitch
+          shouldCorrectPitch: true,
+//        Control the Volume
+          volume: 1.0,
+//        mute the Audio
+          isMuted: false
+     };
+
+     const { sound, status } = await Audio.Sound.createAsync(
+         source,
+         initialStatus
+    );
+
+//  Save the response of sound in playbackInstance
+      
+    this.narratorSound = sound;
+    
+    this.narratorSound.setOnPlaybackStatusUpdate(this._onPlaybackStatusUpdate);
+
+//  Play the Music
+
+    this.narratorSound.playAsync();
+
+}
   shouldComponentUpdate(nextProps,nextState) {
     if (this.props.level != nextProps.level) {
       
@@ -31,13 +79,34 @@ class VowelGameContainer extends React.Component {
       
     return false
     }
-      
+  
+    componentDidUpdate = () => {
+    this._loadNewPlaybackInstance(true)
+  
+    }
+
+    _onPlaybackStatusUpdate = (playbackStatus) => {
+        if (playbackStatus.didJustFinish) {
+            const source3 = paths()[`${this.props.selectedWord}`];
+            const initialStatus2 = {
+              //        Play by default
+                        shouldPlay: true,
+         
+                   };
+       
+            Audio.Sound.createAsync(
+              source3,
+              initialStatus2
+             );
+          }
+    }
+
     wordRenderHelper = () => {
-      if (this.props.wordSpelled) {
+      if (this.props.wordSpelled || (this.props.level > 5)) {
       let newWord = sample(this.props.allWords)
       this.props.updateSelectedWord(newWord)
       this.props.nukeTheStore()
-      return this.props.selectedWord
+      return newWord
     }
      
       return this.props.selectedWord
@@ -73,31 +142,31 @@ class VowelGameContainer extends React.Component {
         return {bottom:(num1), right:(num2)} }
     }
 
-    sampleHelper = () => {
-       let wordVowels = this.props.selectedWord.split("").filter(this.vowelTest)
+    sampleHelper = (word) => {
+       let wordVowels = word.split("").filter(this.vowelTest)
        return ["A","E","I","O","U"].filter(vowel=>!wordVowels.includes(vowel))
     }
 
 
     render() {
-    
+        let word = this.wordRenderHelper()
 
       return (<View style={styles.container} >
           
         <View style={[styles.vowel,this.getRandomPosition("one")]}>
-           <VowelDraggable letter={sample(this.sampleHelper())} id={uuid()} />
+           <VowelDraggable letter={sample(this.sampleHelper(word))} id={uuid()} />
         </View>
         <View style={[styles.vowel,this.getRandomPosition("two")]}>
-           <VowelDraggable letter={sample(this.sampleHelper())} id={uuid()} />
+           <VowelDraggable letter={sample(this.sampleHelper(word))} id={uuid()} />
         </View>
         <View style={[styles.vowel,this.getRandomPosition("three")]}>
-           <VowelDraggable letter={sample(this.sampleHelper())} id={uuid()} />
+           <VowelDraggable letter={sample(this.sampleHelper(word))} id={uuid()} />
         </View>
         <View style={[styles.vowel,this.getRandomPosition("four")]}>
-           <VowelDraggable letter={sample(this.sampleHelper())} id={uuid()} />
+           <VowelDraggable letter={sample(this.sampleHelper(word))} id={uuid()} />
         </View>
 
-      {this.wordRenderHelper().split("").map((letter)=>{
+      {word.split("").map((letter)=>{
         let id=uuid()
         let letterId=uuid()
       return <View key={uuid()} >{<VowelWomper key={id} id={id} letterId={letterId} letter={letter}/>}</View>})}
