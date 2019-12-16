@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, Animated, PanResponder } from 'react-native';
 import {connect} from 'react-redux'
 import { Audio } from 'expo-av'
-
+import paths from '../assets/lettersJson'
 
 class VowelDraggable extends React.Component {
     
@@ -23,7 +23,7 @@ class VowelDraggable extends React.Component {
           onMoveShouldSetPanResponder: (evt, gestureState) => true,
           // onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
           onPanResponderGrant: (e, gestureState) => {
-              console.log(this._value)
+            this._loadNewPlaybackInstance(true)
             this._animatedValue.setOffset({
               x:this._value.x,
               y:this._value.y
@@ -45,6 +45,7 @@ class VowelDraggable extends React.Component {
           ,
           // onPanResponderTerminationRequest: (evt, gestureState) => true,
           onPanResponderRelease: (e, gestureState) => {
+            this.letterSound.stopAsync()
             this.marker.measure((x, y, width, height, pageX, pageY) => {
                 this.isDropZone({x, y, width, height, pageX, pageY});
        })
@@ -64,7 +65,46 @@ class VowelDraggable extends React.Component {
       }
 
  
+      async _loadNewPlaybackInstance(playing) {
+        if (this.letterSound != null) {
+            await this.letterSound.unloadAsync();
+            this.letterSound.setOnPlaybackStatusUpdate(null);
+            this.letterSound = null;
+         }
+  
+         const source = paths()[`${this.props.letter}`];
+  
+         const initialStatus = {
+    //        Play by default
+              shouldPlay: false,
+    //        Control the speed
+              rate: 1.0,
+    //        Correct the pitch
+              shouldCorrectPitch: true,
+    //        Control the Volume
+              volume: 1.0,
+    //        mute the Audio
+              isMuted: false
+         };
+  
+         const { sound, status } = await Audio.Sound.createAsync(
+             source,
+             initialStatus
+        );
+  
+    //  Save the response of sound in playbackInstance
+          
+        this.letterSound = sound;
+        
+        this.letterSound.setIsLoopingAsync(true);
 
+        this.letterSound.setOnPlaybackStatusUpdate(this._onPlaybackStatusUpdate);
+  
+      this.letterSound.playAsync()
+        
+    //  Play the Music
+  
+    }
 
           
 

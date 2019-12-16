@@ -125,10 +125,6 @@ class Draggable extends React.Component {
   
     }
 
-    _onPlaybackStatusUpdate = (status) => {
-
-    }
-
       checkGameState = () => {
         if (this.props.wordSpelled) {
             setTimeout(()=>this.props.addWordToSpelled(this.props.selectedWord),1500)
