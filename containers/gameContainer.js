@@ -117,7 +117,7 @@ class GameContainer extends React.Component {
   }
 
   componentDidUpdate = () => {
-    if (this.props.level > 1 && this.props.level < 7) {
+    if (this.props.level > 1) {
       
       this._loadAnotherPlaybackInstance(true);
   }}
