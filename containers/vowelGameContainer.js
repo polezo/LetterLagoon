@@ -147,7 +147,10 @@ class VowelGameContainer extends React.Component {
        return ["A","E","I","O","U"].filter(vowel=>!wordVowels.includes(vowel))
     }
 
-
+    componentWillUnmount(){
+        this.narratorSound.unloadAsync();
+    }
+    
     render() {
         let word = this.wordRenderHelper()
 

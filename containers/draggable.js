@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, Animated, PanResponder } from 'react-native';
 import {connect} from 'react-redux'
-
+import paths from '../assets/lettersJson'
+import { Audio } from 'expo-av'
 
 class Draggable extends React.Component {
     
@@ -11,7 +12,7 @@ class Draggable extends React.Component {
         this.marker = React.createRef();
         this.state = {womped:false}
         this.thing = null
-      
+       
         this._value= {x:0,y:0}
         this._animatedValue = new Animated.ValueXY()
         
@@ -22,7 +23,7 @@ class Draggable extends React.Component {
           onMoveShouldSetPanResponder: (evt, gestureState) => true,
           // onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
           onPanResponderGrant: (e, gestureState) => {
-              console.log(this._value)
+            this._loadNewPlaybackInstance(true)
             this._animatedValue.setOffset({
               x:this._value.x,
               y:this._value.y
@@ -35,15 +36,14 @@ class Draggable extends React.Component {
             // what is happening!
             // gestureState.d{x,y} will be set to zero now
           },
-          onPanResponderMove: Animated.event([
-            null, { dx: this._animatedValue.x, dy:this._animatedValue.y}
-          ]) 
+          onPanResponderMove: this.letterMoving()
             // The most recent move distance is gestureState.move{X,Y}
             // The accumulated gesture distance since becoming responder is
             // gestureState.d{x,y}
           ,
           // onPanResponderTerminationRequest: (evt, gestureState) => true,
           onPanResponderRelease: (e, gestureState) => {
+              this.letterSound.stopAsync()
             this.marker.measure((x, y, width, height, pageX, pageY) => {
                 this.isDropZone({x, y, width, height, pageX, pageY});
        })
@@ -62,9 +62,72 @@ class Draggable extends React.Component {
         });
       }
 
-    //   shouldComponentUpdate(nextProps,nextState) {
-    //       return false
-    //   }
+
+      letterMoving = () => {
+    
+        return Animated.event([
+            null, { dx: this._animatedValue.x, dy:this._animatedValue.y}
+          ]) 
+      }
+
+    componentDidMount = () => {
+        Audio.setAudioModeAsync({
+            allowsRecordingIOS: false,
+            interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+            playsInSilentModeIOS: true,
+            shouldDuckAndroid: true,
+            interruptionModeAndroid:          Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+            playThroughEarpieceAndroid: false,
+        });
+      //  This function will be called
+     
+    }
+
+
+    async _loadNewPlaybackInstance(playing) {
+        if (this.letterSound != null) {
+            await this.letterSound.unloadAsync();
+            this.letterSound.setOnPlaybackStatusUpdate(null);
+            this.letterSound = null;
+         }
+  
+         const source = paths()[`${this.props.letter}`];
+  
+         const initialStatus = {
+    //        Play by default
+              shouldPlay: false,
+    //        Control the speed
+              rate: 1.0,
+    //        Correct the pitch
+              shouldCorrectPitch: true,
+    //        Control the Volume
+              volume: 1.0,
+    //        mute the Audio
+              isMuted: false
+         };
+  
+         const { sound, status } = await Audio.Sound.createAsync(
+             source,
+             initialStatus
+        );
+  
+    //  Save the response of sound in playbackInstance
+          
+        this.letterSound = sound;
+        
+        this.letterSound.setIsLoopingAsync(true);
+
+        this.letterSound.setOnPlaybackStatusUpdate(this._onPlaybackStatusUpdate);
+  
+      this.letterSound.playAsync()
+        
+    //  Play the Music
+  
+    }
+
+    _onPlaybackStatusUpdate = (status) => {
+
+    }
 
       checkGameState = () => {
         if (this.props.wordSpelled) {

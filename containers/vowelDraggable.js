@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, Animated, PanResponder } from 'react-native';
 import {connect} from 'react-redux'
+import { Audio } from 'expo-av'
 
 
 class VowelDraggable extends React.Component {
