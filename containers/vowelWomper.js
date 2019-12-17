@@ -29,7 +29,7 @@ class VowelWomper extends React.Component {
 
   componentDidMount() {
     setTimeout(this.getWomped,1300)
-    setTimeout(this.addTheDamnBox,500)
+    setTimeout(this.addTheDamnBox,2000)
     // this.props.nukeTheStore()
     
 
@@ -115,10 +115,9 @@ render(){
     return <View style={this.props.letterCorralled ? styles.testColorHit : styles.testColor}ref={(ref) => { this.marker = ref }}
     onLayout={({nativeEvent}) => {
         if (this.vowelTest(this.props.letter))
-        this.marker.measure((x, y, width, height, pageX, pageY) => {
-                  this.setLetterHitBoxes(x, y, width, height, pageX, pageY,this.props.letter,this.props.id);
-         })
-      
+        setTimeout(()=>this.marker.measure((x, y, width, height, pageX, pageY) => {
+            this.setLetterHitBoxes(x, y, width, height, pageX, pageY,this.props.letter,this.props.id);
+   }),1000)
         }} >{this.props.letterCorralled&&<Text style={styles.text2}>{this.props.letter}</Text>}<Animated.View style={this.vowelTest(this.props.letter) ?randomWompedStyle : notWomped} >
             <VowelDraggable letter={this.props.letter} id={this.props.letterId} 
             // LCid={this.props.letterCorralled ? this.props.letterCorralled.hitLetter:null}

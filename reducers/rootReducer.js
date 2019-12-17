@@ -48,6 +48,8 @@ function rootReducer(state=initState(),action){
     case "ADD_WORD_TO_SPELLED":
         return {...state,spelledWords:(state.spelledWords.concat(action.payload)),
         level:state.level+1}
+    case "NUKE_LETTER_HITBOXES":
+        return {...state,letterHitBoxes:[]}
     default:
         return state
     }

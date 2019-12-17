@@ -28,7 +28,7 @@ class GameContainer extends React.Component {
   });
 //  This function will be called
   this._loadNewPlaybackInstance(true);
-  
+  // this.props.nukeLetterHitboxes()
   }
 
   shouldComponentUpdate(nextProps,nextState) {
@@ -118,7 +118,9 @@ class GameContainer extends React.Component {
     if (this.props.level > 1) {
       
       this._loadAnotherPlaybackInstance(true);
-  }}
+  }
+
+}
     
   async _loadAnotherPlaybackInstance() {
     if (this.spellTheWord != null) {
@@ -147,7 +149,7 @@ class GameContainer extends React.Component {
 
   componentWillUnmount() {
     this.narratorSound.unloadAsync();
-    this.spellTheWord.unloadAsync()
+  
 
 }
 
@@ -205,7 +207,8 @@ class GameContainer extends React.Component {
 
 const mapDispatchToProps = (dispatch) =>{
   return {updateSelectedWord:(payload)=>dispatch({type:"UPDATE_SELECTED_WORD",payload}),
-          nukeTheStore:()=>dispatch({type:"NUKE_THE_STORE"})}
+          nukeTheStore:()=>dispatch({type:"NUKE_THE_STORE"}),
+          nukeLetterHitboxes:()=>dispatch({type:"NUKE_LETTER_HITBOXES"})}
 }
 const select = (state) => {
    return {selectedWord: state.selectedWord,

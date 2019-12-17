@@ -133,8 +133,9 @@ class Draggable extends React.Component {
       }
 
       isDropZone = (gestureData) => {
+          
        
-        let hitLetterBox = this.props.letterHitBoxes.find(hitBox => gestureData.pageY > (hitBox.pageY - 50) && gestureData.pageY < (hitBox.pageY + 50) && gestureData.pageX > (hitBox.pageX - 27) && gestureData.pageX < (hitBox.pageX + 27)) 
+        let hitLetterBox = this.props.letterHitBoxes.find(hitBox => gestureData.pageY > (hitBox.pageY - 50) && gestureData.pageY < (hitBox.pageY + 50) && gestureData.pageX > ((hitBox.pageX) - 27) && gestureData.pageX < ((hitBox.pageX) + 27)) 
         console.log(gestureData,hitLetterBox)
         if (hitLetterBox && hitLetterBox.letterValue == this.props.letter) {
             this.props.addCorralledLetter({hitLetterBox:hitLetterBox.id,hitLetter:this.props.id,actualLetter:this.props.letter})

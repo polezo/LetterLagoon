@@ -11,7 +11,7 @@ class WompContainer extends React.Component {
 
   constructor(props) {
     super(props);
-    // this.addTheStupidBox ={}
+    // this.addTheStupidBox =null
     this.wompedLettersY=[]
     this.hitBoxRef = React.createRef()
     this.id = uuid()
@@ -29,7 +29,7 @@ class WompContainer extends React.Component {
 
   componentDidMount() {
     setTimeout(this.getWomped,1300)
-    setTimeout(this.addTheDamnBox,500)
+    setTimeout(this.addTheDamnBox,2000)
     // this.props.nukeTheStore()
     
 
@@ -108,7 +108,9 @@ animValueHelper = () => {
 setLetterHitBoxes = (x, y, width, height, pageX, pageY,letterValue,id) => {
     let hitBox = {x, y, width, height, pageX, pageY,letterValue,id}
     // this._setHitBox = hitBox;
+  
     this.addTheStupidBox = hitBox 
+    // this.props.addHitBox({x, y, width, height, pageX, pageY,letterValue,id})
 }
 
 styleHelper = () => {
@@ -127,9 +129,10 @@ render(){
     return <View style={this.props.letterCorralled ? styles.testColorHit : styles.testColor}ref={(ref) => { this.marker = ref }}
     onLayout={({nativeEvent}) => {
     
-        this.marker.measure((x, y, width, height, pageX, pageY) => {
+        setTimeout(()=>this.marker.measure((x, y, width, height, pageX, pageY) => {
+                
                   this.setLetterHitBoxes(x, y, width, height, pageX, pageY,this.props.letter,this.props.id);
-         })
+         }),1000)
       
         }} >{this.props.letterCorralled&&<Text style={styles.text2}>{this.props.letter}</Text>}<Animated.View style={wompedStyle} >
             <Draggable letter={this.props.letter} id={this.props.letterId} 
