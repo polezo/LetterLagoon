@@ -6,6 +6,7 @@ import VowelGameContainer from './vowelGameContainer'
 import { MaterialIcons } from '@expo/vector-icons';
 import { Audio } from 'expo-av'
 import paths from '../assets/wordsJson'
+import YouWin from './youWinContainer'
 
 const Fragment=React.Fragment
 
@@ -23,7 +24,39 @@ class GamesContainer extends React.Component {
   });
 
 async saySomething() {
-  console.log("sup")
+  let source3
+  
+  this.props.level < 7 ? source3 = require('../assets/Narration/9-SpellTheWord.mp3') : source3 = require('../assets/Narration/FindTheVowelsFor.mp3')
+   
+  const initialStatus = {
+    //        Play by default
+              shouldPlay: true,
+    //        Control the speed
+              rate: 1.0,
+    //        Correct the pitch
+              shouldCorrectPitch: true,
+    //        Control the Volume
+              volume: 1.0,
+    //        mute the Audio
+              isMuted: false
+         };
+  
+         const { sound, status } = await Audio.Sound.createAsync(
+             source3,
+             initialStatus
+        );
+  
+          
+        this.narratorSound = sound;
+        
+    sound.setOnPlaybackStatusUpdate((playbackstatus)=>this.spellTheWordDone(playbackstatus));
+        sound.playAsync();
+      setTimeout(()=>this.unload(sound),2500)
+  
+}
+
+async spellTheWordDone(playbackstatus) {
+  if (playbackstatus.didJustFinish) {
   const source3 = paths()[`${this.props.selectedWord}`];
   const initialStatus = {
     //        Play by default
@@ -53,7 +86,9 @@ async saySomething() {
         sound.playAsync();
       setTimeout(()=>this.unload(sound),2500)
   
+         }
 }
+
 
 unload = (sound) => {
   sound.unloadAsync()
@@ -72,8 +107,31 @@ componentDidMount = () => {
   _this = this
 }
 
+componentWillUnmount = () => {
+  if (this.wordSound) {
+    this.wordSound.unloadAsync()
+  }
+
+  if (this.narratorSound) {
+    this.narratorSound.unloadAsync()
+  }
+}
+
+levelHelper = () => {
+  let comp
+  if (this.props.level < 7) {
+    comp = <GameContainer/>
+  } else if (this.props.level < 13) {
+    comp = <VowelGameContainer/>
+  } else {
+    comp = <YouWin/>
+  }
+    
+  return comp
+}
+
 render() { return <Fragment><StatusBar barStyle="light-content" backgroundColor="red" />
-{this.props.level < 7 ? <GameContainer/> : <VowelGameContainer/>}</Fragment>}
+{this.levelHelper()}</Fragment>}
 }
 
 mapStateToProps = (state) => {

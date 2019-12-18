@@ -47,7 +47,7 @@ class GameContainer extends React.Component {
           this.narratorSound.setOnPlaybackStatusUpdate(null);
           this.narratorSound = null;
        }
-
+       if (this.props.level < 2) {
        const source = require('../assets/Narration/0-Welcome.mp3');
 
        const initialStatus = {
@@ -77,7 +77,7 @@ class GameContainer extends React.Component {
   //  Play the Music
  
       this.narratorSound.playAsync();
-
+       }
   }
 
   _onPlaybackStatusUpdate = playbackStatus => {
@@ -149,7 +149,7 @@ class GameContainer extends React.Component {
   
 
   componentWillUnmount() {
-    this.narratorSound.unloadAsync();
+    if (this.narratorSound) {this.narratorSound.unloadAsync()};
     this.props.nukeTheStore()
     this.props.nukeLetterHitboxes()
 
