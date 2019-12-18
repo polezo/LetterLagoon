@@ -15,6 +15,7 @@ let _this = null
 class GamesContainer extends React.Component {
 
   static navigationOptions = ({ navigation }) => ({
+    title:"LetterLagoon",
     headerLeft: <MaterialIcons name="home" size={32} color="white" onPress={ () => { navigation.goBack() } } style={{left:10}}  />,
     headerRight: <MaterialIcons name="live-help" size={32} color="white" onPress={()=> _this.saySomething() } style={{right:10}}  />,
     headerStyle: {
@@ -119,12 +120,12 @@ componentWillUnmount = () => {
 
 levelHelper = () => {
   let comp
-  if (this.props.level < 7) {
+  if (this.props.level < 6) {
     comp = <GameContainer/>
-  } else if (this.props.level < 13) {
+  } else if (this.props.level < 11) {
     comp = <VowelGameContainer/>
   } else {
-    comp = <YouWin/>
+    comp = <YouWin navigation={this.props.navigation}/>
   }
     
   return comp

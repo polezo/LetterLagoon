@@ -49,6 +49,8 @@ function rootReducer(state=initState(),action){
         level:state.level+1}
     case "NUKE_LETTER_HITBOXES":
         return {...state,letterHitBoxes:[]}
+    case "RESET_LEVEL_TO_ONE":
+        return {...state,level:1,selectedWord:"START"}
     default:
         return state
     }

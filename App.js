@@ -1,6 +1,7 @@
 import React from 'react';
 import rootReducer from './reducers/rootReducer'
 import HomeScreen from './containers/homeContainer'
+import YouWinScreen from './containers/youWinContainer.js'
 import GameContainer from './containers/appContainer'
 import {Provider} from 'react-redux'
 import {createStore} from 'redux'
@@ -12,7 +13,8 @@ const store = createStore(rootReducer,window.__REDUX_DEVTOOLS_EXTENSION__ && win
 const AppNavigator = createStackNavigator(
   {
 Home: HomeScreen,
-Spelling: GameContainer
+Spelling: GameContainer,
+YouWin:YouWinScreen
 },
 {
 initialRouteName:'Home',

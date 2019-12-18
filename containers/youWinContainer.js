@@ -1,7 +1,8 @@
 import React from 'react';
 import { Audio } from 'expo-av'
 import {connect} from 'react-redux'
-import {StyleSheet,View,Text} from 'react-native'
+import {StyleSheet,View,Text,Button} from 'react-native'
+
 
 class YouWin extends React.Component {
     
@@ -57,9 +58,23 @@ class YouWin extends React.Component {
          
     }
     
+    endGame(){
+        // this.props.resetLevel()
+        this.props.navigation.goBack()
+    }
     
+    componentWillUnmount () {
+        this.props.resetLevel()
+        this.props.nukeTheStore()
+    }
+
     render() {
-       return  <View style={styles.container}><Text style={styles.text}>Great Job!</Text></View>
+       return  <View style={styles.container}><Text style={styles.text}>Great Job!</Text>
+       <Button
+       title="Return Home"
+       onPress={() => this.endGame()}
+     />
+   </View>
     }
 }
 
@@ -87,4 +102,9 @@ const styles = StyleSheet.create({
 
 });
 
-export default YouWin
+selectDispatch = (dispatch) => {
+    return {resetLevel:()=>dispatch({type:"RESET_LEVEL_TO_ONE"}),
+            nukeTheStore:()=>dispatch({type:"NUKE_THE_STORE"})}
+}
+
+export default connect(null,selectDispatch)(YouWin)

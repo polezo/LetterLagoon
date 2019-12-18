@@ -14,6 +14,7 @@ class HomeScreen extends React.Component {
         <Button
           title="Play"
           onPress={() => this.props.navigation.navigate('Spelling')}
+         
         />
       </View>
       );
