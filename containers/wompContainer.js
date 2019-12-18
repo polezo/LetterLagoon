@@ -119,6 +119,11 @@ styleHelper = () => {
     }
 }
 
+componentWillUnmount = () => {
+    this.props.nukeTheStore()
+    this.props.nukeLetterHitboxes()
+}
+
 render(){
     
     const wompedStyle = {
@@ -128,11 +133,12 @@ render(){
     }
     return <View style={this.props.letterCorralled ? styles.testColorHit : styles.testColor}ref={(ref) => { this.marker = ref }}
     onLayout={({nativeEvent}) => {
-    
+    if (this.marker) {
         setTimeout(()=>this.marker.measure((x, y, width, height, pageX, pageY) => {
                 
                   this.setLetterHitBoxes(x, y, width, height, pageX, pageY,this.props.letter,this.props.id);
          }),1000)
+        }
       
         }} >{this.props.letterCorralled&&<Text style={styles.text2}>{this.props.letter}</Text>}<Animated.View style={wompedStyle} >
             <Draggable letter={this.props.letter} id={this.props.letterId} 
@@ -176,7 +182,9 @@ const styles = StyleSheet.create({
   mapDispatchToProps = (dispatch) => {
     return { addHitBox:(positionInfoObj) => dispatch({type:"ADD_LETTER_HITBOX",payload:positionInfoObj}),
             toggleWomped:() => dispatch({type:"TOGGLE_WOMPED"}),
-            addWompedLetterY:(payload)=> dispatch({type:"ADD_WOMPED_LETTER_Y",payload:payload}) 
+            addWompedLetterY:(payload)=> dispatch({type:"ADD_WOMPED_LETTER_Y",payload:payload}),
+            nukeTheStore:()=>dispatch({type:"NUKE_THE_STORE"}),
+            nukeLetterHitboxes:()=>dispatch({type:"NUKE_LETTER_HITBOXES"}) 
             }}
 
 mapStateToProps = (state,ownProps) => {

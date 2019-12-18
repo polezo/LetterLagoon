@@ -43,8 +43,7 @@ function rootReducer(state=initState(),action){
         return {...state,
         corralledLetters:[],
         womped:false,
-        wompedLettersY:[],
-        corralledLetters:[],} 
+        wompedLettersY:[],} 
     case "ADD_WORD_TO_SPELLED":
         return {...state,spelledWords:(state.spelledWords.concat(action.payload)),
         level:state.level+1}

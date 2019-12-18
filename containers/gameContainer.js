@@ -7,6 +7,7 @@ import sample from "lodash/sample"
 import { Audio } from 'expo-av'
 import paths from '../assets/wordsJson'
 
+
 class GameContainer extends React.Component {
 
   constructor(props) {
@@ -149,7 +150,8 @@ class GameContainer extends React.Component {
 
   componentWillUnmount() {
     this.narratorSound.unloadAsync();
-  
+    this.props.nukeTheStore()
+    this.props.nukeLetterHitboxes()
 
 }
 
@@ -164,6 +166,7 @@ class GameContainer extends React.Component {
       return this.props.selectedWord
     }
     
+
     render() {
       let x = Math.random() < 0.5 ? -1 : 1;
       let rotationSkipper = Math.random() < 0.5 ? 0 : 1;

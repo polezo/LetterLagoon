@@ -5,9 +5,7 @@ import {connect} from 'react-redux'
 
 class HomeScreen extends React.Component {
     
-    willFocus() {
-        this.props.nukeLetterHitboxes()
-    }
+    
     
     render() {
       return (

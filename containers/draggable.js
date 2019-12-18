@@ -43,7 +43,9 @@ class Draggable extends React.Component {
           ,
           // onPanResponderTerminationRequest: (evt, gestureState) => true,
           onPanResponderRelease: (e, gestureState) => {
+              if (this.letterSound) {
               this.letterSound.stopAsync()
+              }
             this.marker.measure((x, y, width, height, pageX, pageY) => {
                 this.isDropZone({x, y, width, height, pageX, pageY});
        })

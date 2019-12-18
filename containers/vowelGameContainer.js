@@ -148,9 +148,10 @@ class VowelGameContainer extends React.Component {
     }
 
     componentWillUnmount(){
+        if (this.narratorSound) {
         this.narratorSound.unloadAsync();
-    }
-    
+    }}
+
     render() {
         let word = this.wordRenderHelper()
 
