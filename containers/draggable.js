@@ -36,7 +36,7 @@ class Draggable extends React.Component {
             })
             this.setState({letterDragging:true})
             if (this.letterAnimation) {
-           this.letterAnimation.play()
+           this.letterAnimation.play(1,60)
             }
           },
           onPanResponderMove: this.letterMoving()
@@ -156,11 +156,12 @@ class Draggable extends React.Component {
         style={{
           
           width:80,
-          height: this.state.letterDragging ? 100 : 60,
+          height: this.state.letterDragging ? 160 : 90,
+          right: this.state.letterDragging ? 10 : 0,
           
           
         }}
-        source={require('../assets/animations/LetterBodyFiles/A.json')}
+        source={require('../assets/animations/LetterBodyFiles/data.json')}
        
       /></View>
       }
