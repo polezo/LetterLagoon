@@ -192,6 +192,7 @@ const styles = StyleSheet.create({
       textAlign:'center'
     },
     text:{
+        fontFamily:"AmericanTypewriter", 
         flex:-1,
         fontSize: 80,
         fontWeight:"bold",

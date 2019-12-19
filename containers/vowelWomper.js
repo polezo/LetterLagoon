@@ -139,24 +139,26 @@ const styles = StyleSheet.create({
       flexDirection:'row', 
     },
     text: {
+        fontFamily:"AmericanTypewriter", 
         bottom:90,
         fontSize: 80,
         textAlign:'center',
         fontWeight:"bold",
     },
     text2: {
+        fontFamily:"AmericanTypewriter", 
         fontWeight:"bold",
         fontSize: 80,
         textAlign:'center'
     },
     testColor: {
-        width:72,
+        width:85,
     //   backgroundColor:'rgba(0, 255, 0, 0.3)',
     },
     testColorHit:{
-        width:72,
+        width:85,
         height:100,
-        bottom:46,
+        bottom:48,
       backgroundColor:'rgba(238, 232, 170, 0.8)',
   }});
 
