@@ -175,7 +175,7 @@ class GameContainer extends React.Component {
       {this.wordRenderHelper().split("").map((letter,i)=>{
         let id=uuid()
         let letterId=uuid()
-      return <View key={uuid()} ><WompContainer rotationSkipper={rotationSkipper} i={i}key={id} id={id} letterId={letterId} x={x} letter={letter}/></View>})}
+      return <View key={uuid()} ><WompContainer celebrate={this.props.celebrate} rotationSkipper={rotationSkipper} i={i}key={id} id={id} letterId={letterId} x={x} letter={letter}/></View>})}
          
         </View>
       );
@@ -185,7 +185,7 @@ class GameContainer extends React.Component {
     const styles = StyleSheet.create({
       container: {
         flex: 1,
-        backgroundColor: '#fff',
+        // backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection:'row', 
@@ -213,12 +213,13 @@ const mapDispatchToProps = (dispatch) =>{
           nukeTheStore:()=>dispatch({type:"NUKE_THE_STORE"}),
           nukeLetterHitboxes:()=>dispatch({type:"NUKE_LETTER_HITBOXES"})}
 }
-const select = (state) => {
+const select = (state,ownProps) => {
    return {selectedWord: state.selectedWord,
           corralledLetters: state.corralledLetters,
           allWords: state.allWords,
           wordSpelled:(state.letterHitBoxes.length == 0 ? true : false),
-          level:state.level
+          level:state.level,
+          celebrate:ownProps.celebrate
         }
 }
 

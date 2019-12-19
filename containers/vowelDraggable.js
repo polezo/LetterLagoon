@@ -112,6 +112,7 @@ class VowelDraggable extends React.Component {
 
       checkGameState = () => {
         if (this.props.wordSpelled) {
+          this.props.celebrate() 
             setTimeout(()=>{
                 this.props.addWordToSpelled(this.props.selectedWord)
                 

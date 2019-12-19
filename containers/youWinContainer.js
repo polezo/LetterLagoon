@@ -2,6 +2,7 @@ import React from 'react';
 import { Audio } from 'expo-av'
 import {connect} from 'react-redux'
 import {StyleSheet,View,Text,Button} from 'react-native'
+import LottieView from 'lottie-react-native';
 
 
 class YouWin extends React.Component {
@@ -15,7 +16,7 @@ class YouWin extends React.Component {
           interruptionModeAndroid:          Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
           playThroughEarpieceAndroid: false,
       });
-
+      this.animation.play()
       this._loadNewPlaybackInstance(true);
 
       }
@@ -69,7 +70,22 @@ class YouWin extends React.Component {
     }
 
     render() {
-       return  <View style={styles.container}><Text style={styles.text}>Great Job!</Text>
+       return  <View style={styles.container}>
+           <LottieView loop={false}
+  ref={animation => {
+    this.animation = animation;
+  }}
+  style={{
+    
+    width:200,
+    height: 250,
+    
+    // backgroundColor:"pink"
+  }}
+  source={require('../assets/animations/trophy.json')}
+ 
+/>
+           <Text style={styles.text}>Great Job!</Text>
        <Button
        title="Return Home"
        onPress={() => this.endGame()}
@@ -84,7 +100,8 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
-      flexDirection:'row', 
+      bottom:120
+   
     },
     text: {
       textAlign:'center',

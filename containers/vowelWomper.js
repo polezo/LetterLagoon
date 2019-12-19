@@ -119,7 +119,7 @@ render(){
             this.setLetterHitBoxes(x, y, width, height, pageX, pageY,this.props.letter,this.props.id);
    }),1000)
         }} >{this.props.letterCorralled&&<Text style={styles.text2}>{this.props.letter}</Text>}<Animated.View style={this.vowelTest(this.props.letter) ?randomWompedStyle : notWomped} >
-            <VowelDraggable letter={this.props.letter} id={this.props.letterId} 
+            <VowelDraggable celebrate={this.props.celebrate} letter={this.props.letter} id={this.props.letterId} 
             // LCid={this.props.letterCorralled ? this.props.letterCorralled.hitLetter:null}
             />
             </Animated.View><Text style={[styles.text,]}>_</Text><Animated.View style={randomWompedStyle} >

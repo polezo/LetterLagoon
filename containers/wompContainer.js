@@ -141,7 +141,7 @@ render(){
         }
       
         }} >{this.props.letterCorralled&&<Text style={styles.text2}>{this.props.letter}</Text>}<Animated.View style={wompedStyle} >
-            <Draggable letter={this.props.letter} id={this.props.letterId} 
+            <Draggable celebrate={this.props.celebrate} letter={this.props.letter} id={this.props.letterId} 
             // LCid={this.props.letterCorralled ? this.props.letterCorralled.hitLetter:null}
             />
             </Animated.View><Text style={[styles.text,this.styleHelper()]}>_</Text></View>
@@ -196,7 +196,8 @@ mapStateToProps = (state,ownProps) => {
         wompedLettersY:state.wompedLettersY,
         level:state.level,
         x:ownProps.x,
-        rotationSkipper:ownProps.rotationSkipper
+        rotationSkipper:ownProps.rotationSkipper,
+        celebrate:ownProps.celebrate
         }
 }
 

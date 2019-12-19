@@ -129,6 +129,7 @@ class Draggable extends React.Component {
 
       checkGameState = () => {
         if (this.props.wordSpelled) {
+          this.props.celebrate()
             setTimeout(()=>this.props.addWordToSpelled(this.props.selectedWord),1500)
             
           }
@@ -218,7 +219,8 @@ const mapStateToProps = (state,ownProps) => {
             womped:state.womped,
             cloneCorralled:state.corralledLetters.find(letter=>letter.actualLetter===ownProps.letter),
             wordSpelled:(state.letterHitBoxes.length == 0 ? true : false),
-            selectedWord:state.selectedWord}
+            selectedWord:state.selectedWord,
+            celebrate:ownProps.celebrate}
 }
  
  export default connect(mapStateToProps,mapDispatchToProps)(Draggable);

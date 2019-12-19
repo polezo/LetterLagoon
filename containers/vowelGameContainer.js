@@ -173,7 +173,7 @@ class VowelGameContainer extends React.Component {
       {word.split("").map((letter)=>{
         let id=uuid()
         let letterId=uuid()
-      return <View key={uuid()} >{<VowelWomper key={id} id={id} letterId={letterId} letter={letter}/>}</View>})}
+      return <View key={uuid()} >{<VowelWomper celebrate={this.props.celebrate} key={id} id={id} letterId={letterId} letter={letter}/>}</View>})}
          
         </View>
       );
@@ -183,7 +183,7 @@ class VowelGameContainer extends React.Component {
     const styles = StyleSheet.create({
       container: {
         flex: 1,
-        backgroundColor: '#fff',
+        // backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection:'row', 
