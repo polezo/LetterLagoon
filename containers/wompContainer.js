@@ -144,7 +144,7 @@ render(){
             <Draggable celebrate={this.props.celebrate} letter={this.props.letter} id={this.props.letterId} 
             // LCid={this.props.letterCorralled ? this.props.letterCorralled.hitLetter:null}
             />
-            </Animated.View><Text style={[styles.text,this.styleHelper()]}>_</Text></View>
+            </Animated.View><Text style={[styles.text,this.styleHelper(),(this.props.letter==="A" && !this.props.letterCorralled) && {bottom:70}]}>_</Text></View>
 }
 
 }

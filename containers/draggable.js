@@ -1,11 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, Animated, PanResponder } from 'react-native';
+import { StyleSheet, Text, Animated, PanResponder,View } from 'react-native';
 import {connect} from 'react-redux'
 import paths from '../assets/lettersJson'
 import { Audio } from 'expo-av'
+import LottieView from 'lottie-react-native';
 
 class Draggable extends React.Component {
     
+    state={letterDragging:false}
 
     constructor(props) {
         super(props);
@@ -32,9 +34,10 @@ class Draggable extends React.Component {
               x:0,
               y:0
             })
-            // The gesture has started. Show visual feedback so the user knows
-            // what is happening!
-            // gestureState.d{x,y} will be set to zero now
+            this.setState({letterDragging:true})
+            if (this.letterAnimation) {
+           this.letterAnimation.play()
+            }
           },
           onPanResponderMove: this.letterMoving()
             // The most recent move distance is gestureState.move{X,Y}
@@ -49,18 +52,12 @@ class Draggable extends React.Component {
             this.marker.measure((x, y, width, height, pageX, pageY) => {
                 this.isDropZone({x, y, width, height, pageX, pageY});
        })
-            // The user has released all touches while this view is the
-            // responder. This typically means a gesture has succeeded
+       this.setState({letterDragging:false})
+       if (this.letterAnimation) {
+        this.letterAnimation.reset()
+         }     
           },
-          // onPanResponderTerminate: (evt, gestureState) => {
-          //   // Another component has become the responder, so this gesture
-          //   // should be cancelled
-          // },
-          // onShouldBlockNativeResponder: (evt, gestureState) => {
-          //   // Returns whether this component should block native components from becoming the JS
-          //   // responder. Returns true by default. Is currently only supported on android.
-          //   return true;
-          // },
+ 
         });
       }
 
@@ -96,15 +93,10 @@ class Draggable extends React.Component {
          const source = paths()[`${this.props.letter}`];
   
          const initialStatus = {
-    //        Play by default
               shouldPlay: false,
-    //        Control the speed
               rate: 1.0,
-    //        Correct the pitch
               shouldCorrectPitch: true,
-    //        Control the Volume
               volume: 1.0,
-    //        mute the Audio
               isMuted: false
          };
   
@@ -152,9 +144,27 @@ class Draggable extends React.Component {
                 friction: 5
               }).start();
         }
-        // return gestureData.pageY > (this.props.letterHitBoxes[0].pageY - 50) && gestureData.pageY < (this.props.letterHitBoxes[0].pageY + 50)
-        // let DZs = this.props.letterHitboxes;
-        // return gesture.moveY > dz.y && gesture.moveY < dz.y + dz.height;
+
+    }
+
+    tempLetterHelper = () => {
+      if (this.props.letter === "A") {
+        return  <View ref={(ref) => { this.marker = ref }}><LottieView loop={true}
+        ref={animation => {
+          this.letterAnimation = animation;
+        }}
+        style={{
+          
+          width:80,
+          height: this.state.letterDragging ? 100 : 60,
+          
+          
+        }}
+        source={require('../assets/animations/LetterBodyFiles/A.json')}
+       
+      /></View>
+      }
+      return <Text ref={(ref) => { this.marker = ref }} style={[styles.text,this.stylesHelper()]}>{this.props.letter}</Text>
     }
 
     LCidChecker = (id) => {
@@ -177,7 +187,7 @@ class Draggable extends React.Component {
         }  
         
       return (<Animated.View style={[styles.view,this.stylesHelper()]} {...this._panResponder.panHandlers} style={[animatedStyle]}>
-            {!this.props.letterCorralled && <Text ref={(ref) => { this.marker = ref }} style={[styles.text,this.stylesHelper()]}>{this.props.letter}</Text>}
+            {!this.props.letterCorralled && this.tempLetterHelper()}
           </Animated.View>
       );
     }

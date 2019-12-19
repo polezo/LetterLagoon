@@ -4,7 +4,7 @@ import uuid from 'react-uuid'
 import { connect } from 'react-redux'
 import VowelWomper from "./vowelWomper"
 import sample from "lodash/sample"
-import VowelDraggable from './vowelDraggable'
+import Draggable from './draggable'
 import { Audio } from 'expo-av'
 import paths from '../assets/wordsJson'
 
@@ -158,16 +158,16 @@ class VowelGameContainer extends React.Component {
       return (<View style={styles.container} >
           
         <View style={[styles.vowel,this.getRandomPosition("one")]}>
-           <VowelDraggable letter={sample(this.sampleHelper(word))} id={uuid()} />
+           <Draggable letter={sample(this.sampleHelper(word))} id={uuid()} />
         </View>
         <View style={[styles.vowel,this.getRandomPosition("two")]}>
-           <VowelDraggable letter={sample(this.sampleHelper(word))} id={uuid()} />
+           <Draggable letter={sample(this.sampleHelper(word))} id={uuid()} />
         </View>
         <View style={[styles.vowel,this.getRandomPosition("three")]}>
-           <VowelDraggable letter={sample(this.sampleHelper(word))} id={uuid()} />
+           <Draggable letter={sample(this.sampleHelper(word))} id={uuid()} />
         </View>
         <View style={[styles.vowel,this.getRandomPosition("four")]}>
-           <VowelDraggable letter={sample(this.sampleHelper(word))} id={uuid()} />
+           <Draggable letter={sample(this.sampleHelper(word))} id={uuid()} />
         </View>
 
       {word.split("").map((letter)=>{

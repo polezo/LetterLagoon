@@ -30,15 +30,10 @@ class YouWin extends React.Component {
          const source = require('../assets/Narration/LetterLagoonBackToNormal.mp3');
   
          const initialStatus = {
-    //        Play by default
               shouldPlay: false,
-    //        Control the speed
               rate: 1.0,
-    //        Correct the pitch
               shouldCorrectPitch: true,
-    //        Control the Volume
               volume: 1.0,
-    //        mute the Audio
               isMuted: false
          };
   
@@ -47,20 +42,14 @@ class YouWin extends React.Component {
              initialStatus
         );
   
-    //  Save the response of sound in playbackInstance
-          
         this.narratorSound = sound;
-        
-        this.narratorSound.setOnPlaybackStatusUpdate(this._onPlaybackStatusUpdate);
-  
-    //  Play the Music
-   
+      
         this.narratorSound.playAsync();
          
     }
     
     endGame(){
-        // this.props.resetLevel()
+       
         this.props.navigation.goBack()
     }
     
@@ -80,7 +69,6 @@ class YouWin extends React.Component {
     width:200,
     height: 250,
     
-    // backgroundColor:"pink"
   }}
   source={require('../assets/animations/trophy.json')}
  
@@ -104,10 +92,10 @@ const styles = StyleSheet.create({
    
     },
     text: {
+      fontFamily:"AmericanTypewriter", 
       textAlign:'center',
       fontSize:80,
-      // position:"absolute",
-      // bottom:80
+     
     },
     testColor: {
       backgroundColor:'green'

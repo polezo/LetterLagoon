@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Animated } from 'react-native';
-import VowelDraggable from './vowelDraggable'
+import Draggable from './draggable'
 import uuid from 'react-uuid'
 import { connect } from 'react-redux'
 import sample from 'lodash/sample'
@@ -119,7 +119,7 @@ render(){
             this.setLetterHitBoxes(x, y, width, height, pageX, pageY,this.props.letter,this.props.id);
    }),1000)
         }} >{this.props.letterCorralled&&<Text style={styles.text2}>{this.props.letter}</Text>}<Animated.View style={this.vowelTest(this.props.letter) ?randomWompedStyle : notWomped} >
-            <VowelDraggable celebrate={this.props.celebrate} letter={this.props.letter} id={this.props.letterId} 
+            <Draggable celebrate={this.props.celebrate} letter={this.props.letter} id={this.props.letterId} 
             // LCid={this.props.letterCorralled ? this.props.letterCorralled.hitLetter:null}
             />
             </Animated.View><Text style={[styles.text,]}>_</Text><Animated.View style={randomWompedStyle} >
