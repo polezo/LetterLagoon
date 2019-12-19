@@ -60,7 +60,7 @@ levelRotate = () => {
 
 //make these not random then record some words/letters
 getRandomIntY = (i) => {
-    let maxLength = Math.floor(Math.random() * Math.floor(200)+150)
+    let maxLength = Math.floor(Math.random() * 200+150)
     
     switch (i % 4) {
         case 0:

@@ -41,6 +41,7 @@ export default paths = () => {
     "NUT": require("../assets/Words/NUT.mp3"),
     "PIG": require("../assets/Words/PIG.mp3"),
     "PIZZA": require("../assets/Words/PIZZA.mp3"),
+    "PLAY": require("../assets/Words/PLAY.mp3"),
     "RAN": require("../assets/Words/RAN.mp3"),
     "RAT": require("../assets/Words/RAT.mp3"),
     "RED": require("../assets/Words/RED.mp3"),

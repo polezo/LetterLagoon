@@ -122,9 +122,11 @@ componentWillUnmount = () => {
 }
 
 celebrate = () => {
-  
-  this.animation.play()
-  this.animation2.play()
+  console.log(this.animation3)
+  this.firework1.play()
+  this.firework2.play()
+  this.firework3.play()
+  this.firework4.play()
 }
 
 levelHelper = () => {
@@ -146,14 +148,14 @@ top:200,right:0,}} ref={animationDiv=>this.animationDiv=animationDiv}>
 
 <LottieView loop={false}
   ref={animation => {
-    this.animation = animation;
+    this.firework1 = animation;
   }}
   style={{
     
     width:200,
     height: 250,
-    right:40,
-    bottom:50
+    right:Math.floor(Math.random() * 140+10),
+    bottom:Math.floor(Math.random() * 40+70)
     // backgroundColor:"pink"
   }}
   source={require('../assets/animations/greenFirework.json')}
@@ -163,17 +165,49 @@ top:200,right:0,}} ref={animationDiv=>this.animationDiv=animationDiv}>
 
 <LottieView loop={false}
   ref={animation => {
-    this.animation2 = animation;
+    this.firework2 = animation;
   }}
   style={{
     
     width:200,
     height: 250,
-    right:130,
-    bottom:130
+    right:Math.floor(Math.random() * 140+10),
+    bottom:(Math.random() * 90+70)
     // backgroundColor:"pink"
   }}
   source={require('../assets/animations/sparkles.json')}
+ 
+/>
+
+<LottieView loop={false}
+  ref={animation => {
+    this.firework3 = animation;
+  }}
+  style={{
+    
+    width:200,
+    height: 250,
+    right:Math.floor(Math.random() * 140+10),
+    bottom:Math.floor(Math.random() * 80+150)
+    // backgroundColor:"pink"
+  }}
+  source={require('../assets/animations/orangeFirework.json')}
+ 
+/>
+
+<LottieView loop={false}
+  ref={animation => {
+    this.firework4 = animation;
+  }}
+  style={{
+    
+    width:200,
+    height: 250,
+    right:Math.floor(Math.random() * 140+10),
+    bottom:Math.floor(Math.random() * 110+230)
+    // backgroundColor:"pink"
+  }}
+  source={require('../assets/animations/purpleFirework.json')}
  
 />
 
