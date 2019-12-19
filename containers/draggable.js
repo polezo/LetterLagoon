@@ -194,6 +194,7 @@ const styles = StyleSheet.create({
     text:{
         flex:-1,
         fontSize: 80,
+        fontWeight:"bold",
         textAlign:'center'
     },
     wompedText: {

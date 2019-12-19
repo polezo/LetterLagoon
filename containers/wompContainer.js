@@ -161,10 +161,11 @@ const styles = StyleSheet.create({
     text: {
         bottom:90,
         fontSize: 80,
+        fontWeight:"bold",
         textAlign:'center'
     },
     text2: {
-        
+        fontWeight:"bold",
         fontSize: 80,
         textAlign:'center'
     },

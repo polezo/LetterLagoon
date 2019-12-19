@@ -9,8 +9,8 @@ class HomeScreen extends React.Component {
     
     render() {
       return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={{fontSize:80}}>LetterLagoon</Text>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center',bottom:30 }}>
+        <Text style={{fontSize:80, fontWeight:"bold"}}>LetterLagoon</Text>
         <Button
           title="Play"
           onPress={() => this.props.navigation.navigate('Spelling')}

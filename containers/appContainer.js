@@ -8,6 +8,7 @@ import { Audio } from 'expo-av'
 import paths from '../assets/wordsJson'
 import YouWin from './youWinContainer'
 import LottieView from "lottie-react-native";
+import sample from "lodash/sample"
 
 
 
@@ -33,15 +34,10 @@ async saySomething() {
   this.props.level < 6 ? source3 = require('../assets/Narration/9-SpellTheWord.mp3') : source3 = require('../assets/Narration/FindTheVowelsFor.mp3')
    
   const initialStatus = {
-    //        Play by default
               shouldPlay: true,
-    //        Control the speed
               rate: 1.0,
-    //        Correct the pitch
               shouldCorrectPitch: true,
-    //        Control the Volume
               volume: 1.0,
-    //        mute the Audio
               isMuted: false
          };
   
@@ -63,30 +59,18 @@ async spellTheWordDone(playbackstatus) {
   if (playbackstatus.didJustFinish) {
   const source3 = paths()[`${this.props.selectedWord}`];
   const initialStatus = {
-    //        Play by default
               shouldPlay: true,
-    //        Control the speed
               rate: 1.0,
-    //        Correct the pitch
               shouldCorrectPitch: true,
-    //        Control the Volume
               volume: 1.0,
-    //        mute the Audio
               isMuted: false
          };
   
          const { sound, status } = await Audio.Sound.createAsync(
              source3,
              initialStatus
-        );
-  
-    //  Save the response of sound in playbackInstance
-          
+        );   
         this.wordSound = sound;
-        
-  
-    //  Play the Music
-   
         sound.playAsync();
       setTimeout(()=>this.unload(sound),2500)
   
@@ -97,6 +81,7 @@ async spellTheWordDone(playbackstatus) {
 unload = (sound) => {
   sound.unloadAsync()
 }
+
 
 
 componentDidMount = () => {
@@ -122,11 +107,34 @@ componentWillUnmount = () => {
 }
 
 celebrate = () => {
-  console.log(this.animation3)
   this.firework1.play()
   this.firework2.play()
   this.firework3.play()
   this.firework4.play()
+  this.celebrateEncouragement()
+}
+
+encouragementHelper = () => {
+  return [require('../assets/Encouragement/GoodJob.mp3'),require('../assets/Encouragement/GreatWork.mp3'),require('../assets/Encouragement/Nice.mp3'),require('../assets/Encouragement/WayToGo.mp3'),require('../assets/Encouragement/WellDone.mp3')]
+}
+
+async celebrateEncouragement() {
+ source3 = sample(this.encouragementHelper())
+  const initialStatus = {
+              shouldPlay: true,
+              rate: 1.0,
+              shouldCorrectPitch: true,
+              volume: 1.0,
+              isMuted: false
+         };
+  
+         const { sound, status } = await Audio.Sound.createAsync(
+             source3,
+             initialStatus
+        );
+        
+        sound.playAsync();
+      setTimeout(()=>this.unload(sound),2500)
 }
 
 levelHelper = () => {
@@ -156,11 +164,9 @@ top:200,right:0,}} ref={animationDiv=>this.animationDiv=animationDiv}>
     height: 250,
     right:Math.floor(Math.random() * 140+10),
     bottom:Math.floor(Math.random() * 40+70)
-    // backgroundColor:"pink"
+
   }}
   source={require('../assets/animations/greenFirework.json')}
-  // OR find more Lottie files @ https://lottiefiles.com/featured
-  // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
 />
 
 <LottieView loop={false}
@@ -173,7 +179,7 @@ top:200,right:0,}} ref={animationDiv=>this.animationDiv=animationDiv}>
     height: 250,
     right:Math.floor(Math.random() * 140+10),
     bottom:(Math.random() * 90+70)
-    // backgroundColor:"pink"
+
   }}
   source={require('../assets/animations/sparkles.json')}
  
@@ -189,7 +195,7 @@ top:200,right:0,}} ref={animationDiv=>this.animationDiv=animationDiv}>
     height: 250,
     right:Math.floor(Math.random() * 140+10),
     bottom:Math.floor(Math.random() * 80+150)
-    // backgroundColor:"pink"
+ 
   }}
   source={require('../assets/animations/orangeFirework.json')}
  
@@ -205,7 +211,7 @@ top:200,right:0,}} ref={animationDiv=>this.animationDiv=animationDiv}>
     height: 250,
     right:Math.floor(Math.random() * 140+10),
     bottom:Math.floor(Math.random() * 110+230)
-    // backgroundColor:"pink"
+
   }}
   source={require('../assets/animations/purpleFirework.json')}
  
