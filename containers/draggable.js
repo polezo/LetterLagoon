@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import paths from '../assets/lettersJson'
 import { Audio } from 'expo-av'
 import LottieView from 'lottie-react-native';
+import animationPaths from '../assets/lettersAnimations'
 
 class Draggable extends React.Component {
     
@@ -34,6 +35,7 @@ class Draggable extends React.Component {
               x:0,
               y:0
             })
+            this.props.toggleLetterDragging()
             this.setState({letterDragging:true})
             if (this.letterAnimation) {
            this.letterAnimation.play(1,60)
@@ -53,6 +55,7 @@ class Draggable extends React.Component {
                 this.isDropZone({x, y, width, height, pageX, pageY});
        })
        this.setState({letterDragging:false})
+       this.props.toggleLetterDragging()
        if (this.letterAnimation) {
         this.letterAnimation.reset()
          }     
@@ -148,24 +151,23 @@ class Draggable extends React.Component {
     }
 
     tempLetterHelper = () => {
-      if (this.props.letter === "A") {
+      const source = animationPaths()[`${this.props.letter}`]
         return  <View ref={(ref) => { this.marker = ref }}><LottieView loop={true}
         ref={animation => {
           this.letterAnimation = animation;
         }}
-        style={{
+        style={[{
           
           width:80,
           height: this.state.letterDragging ? 160 : 90,
           right: this.state.letterDragging ? 10 : 0,
           
           
-        }}
-        source={require('../assets/animations/LetterBodyFiles/data.json')}
+        }]}
+        source={source}
        
       /></View>
-      }
-      return <Text ref={(ref) => { this.marker = ref }} style={[styles.text,this.stylesHelper()]}>{this.props.letter}</Text>
+ 
     }
 
     LCidChecker = (id) => {

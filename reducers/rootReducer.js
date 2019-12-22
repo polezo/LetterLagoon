@@ -12,7 +12,8 @@ function initState () {
         corralledLetters:[],
         womped:false,
         wompedLettersY:[],
-        spelledWords:[]
+        spelledWords:[],
+        
     }
 }
 

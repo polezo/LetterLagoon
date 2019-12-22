@@ -20,7 +20,7 @@ class WompContainer extends React.Component {
         this._wompedAnim, {
         toValue: this.animValueHelper()
     })
-  
+    this.state = {letterDragging:false}
   }
 
 //   shouldComponentUpdate(nextProps,nextState) {
@@ -33,6 +33,10 @@ class WompContainer extends React.Component {
     // this.props.nukeTheStore()
     
 
+}
+
+toggleLetterDragging = () => {
+    this.setState({letterDragging:!this.state.letterDragging})
 }
 
 addTheDamnBox = () => {
@@ -141,10 +145,10 @@ render(){
         }
       
         }} >{this.props.letterCorralled&&<Text style={styles.text2}>{this.props.letter}</Text>}<Animated.View style={wompedStyle} >
-            <Draggable celebrate={this.props.celebrate} letter={this.props.letter} id={this.props.letterId} 
+            <Draggable toggleLetterDragging={this.toggleLetterDragging}celebrate={this.props.celebrate} letter={this.props.letter} id={this.props.letterId} 
             // LCid={this.props.letterCorralled ? this.props.letterCorralled.hitLetter:null}
             />
-            </Animated.View><Text style={[styles.text,this.styleHelper(),(this.props.letter==="A" && !this.props.letterCorralled) && {bottom:85}]}>_</Text></View>
+            </Animated.View><Text style={[styles.text,this.styleHelper(),(!this.props.letterCorralled) && {bottom:85},(!this.props.letterCorralled &&this.state.letterDragging) && {bottom:120}]}>_</Text></View>
 }
 
 }
