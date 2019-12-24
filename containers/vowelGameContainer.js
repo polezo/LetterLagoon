@@ -14,7 +14,12 @@ class VowelGameContainer extends React.Component {
     super(props);
     this.refsArray = this.props.selectedWord.split("").map(()=>React.createRef())
     this.narratorSound = null
+    this.state={letterDragging:false}
   }
+
+  toggleLetterDragging = () => {
+    this.setState({letterDragging:!this.state.letterDragging})
+}
 
   componentDidMount = () => {
     Audio.setAudioModeAsync({
@@ -158,22 +163,22 @@ class VowelGameContainer extends React.Component {
       return (<View style={styles.container} >
           
         <View style={[styles.vowel,this.getRandomPosition("one")]}>
-           <Draggable letter={sample(this.sampleHelper(word))} id={uuid()} />
+           <Draggable toggleLetterDragging={this.toggleLetterDragging} letter={sample(this.sampleHelper(word))} id={uuid()} />
         </View>
         <View style={[styles.vowel,this.getRandomPosition("two")]}>
-           <Draggable letter={sample(this.sampleHelper(word))} id={uuid()} />
+           <Draggable toggleLetterDragging={this.toggleLetterDragging}  letter={sample(this.sampleHelper(word))} id={uuid()} />
         </View>
         <View style={[styles.vowel,this.getRandomPosition("three")]}>
-           <Draggable letter={sample(this.sampleHelper(word))} id={uuid()} />
+           <Draggable toggleLetterDragging={this.toggleLetterDragging}  letter={sample(this.sampleHelper(word))} id={uuid()} />
         </View>
         <View style={[styles.vowel,this.getRandomPosition("four")]}>
-           <Draggable letter={sample(this.sampleHelper(word))} id={uuid()} />
+           <Draggable toggleLetterDragging={this.toggleLetterDragging}  letter={sample(this.sampleHelper(word))} id={uuid()} />
         </View>
 
       {word.split("").map((letter)=>{
         let id=uuid()
         let letterId=uuid()
-      return <View key={uuid()} >{<VowelWomper celebrate={this.props.celebrate} key={id} id={id} letterId={letterId} letter={letter}/>}</View>})}
+      return <View key={uuid()} >{<VowelWomper toggleLetterDragging={this.toggleLetterDragging}  letterDragging={this.state.letterDragging} celebrate={this.props.celebrate} key={id} id={id} letterId={letterId} letter={letter}/>}</View>})}
          
         </View>
       );

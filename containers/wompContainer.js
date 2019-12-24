@@ -121,6 +121,7 @@ styleHelper = () => {
     if (!this.props.letterCorralled && this.props.cloneCorralled) {
         return {bottom:42}
     }
+  
 }
 
 componentWillUnmount = () => {
@@ -144,11 +145,20 @@ render(){
          }),1000)
         }
       
-        }} >{this.props.letterCorralled&&<Text style={styles.text2}>{this.props.letter}</Text>}<Animated.View style={wompedStyle} >
-            <Draggable toggleLetterDragging={this.toggleLetterDragging}celebrate={this.props.celebrate} letter={this.props.letter} id={this.props.letterId} 
+        }} >{this.props.letterCorralled&&<Text style={styles.text2}>{this.props.letter}</Text>}<Animated.View style={[wompedStyle,]} >
+            <Draggable targetCorralled={this.props.letterCorralled} toggleLetterDragging={this.toggleLetterDragging} celebrate={this.props.celebrate} letter={this.props.letter} id={this.props.letterId} 
             // LCid={this.props.letterCorralled ? this.props.letterCorralled.hitLetter:null}
             />
-            </Animated.View><Text style={[styles.text,this.styleHelper(),(!this.props.letterCorralled) && {bottom:85},(!this.props.letterCorralled &&this.state.letterDragging) && {bottom:120}]}>_</Text></View>
+            </Animated.View><Text style={[styles.text,
+            // (this.props.cloneCorralled) && {bottom:90},
+          
+            (this.props.letterCorralled) && {bottom:90},
+            // (this.props.cloneCorralled && !this.props.letterCorralled) && {bottom:45},
+            
+            (this.state.letterDragging) && {bottom:90},
+            
+            // (this.props.5Corralled) && {bottom:90}
+            ]}>_</Text></View>
 }
 
 }
@@ -172,7 +182,7 @@ const styles = StyleSheet.create({
     text2: {
         fontFamily:"AmericanTypewriter", 
         fontWeight:"bold",
-        fontSize: 80,
+        fontSize: 77,
         textAlign:'center'
     },
     testColor: {
@@ -204,7 +214,8 @@ mapStateToProps = (state,ownProps) => {
         level:state.level,
         x:ownProps.x,
         rotationSkipper:ownProps.rotationSkipper,
-        celebrate:ownProps.celebrate
+        celebrate:ownProps.celebrate,
+        corralledLetters:state.corralledLetters
         }
 }
 

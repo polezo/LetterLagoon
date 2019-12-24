@@ -152,7 +152,7 @@ class Draggable extends React.Component {
 
     tempLetterHelper = () => {
       const source = animationPaths()[`${this.props.letter}`]
-        return  <View ref={(ref) => { this.marker = ref }}><LottieView loop={true}
+        return  <View style={[{height:90},this.props.targetCorralled && {bottom:90}]} ref={(ref) => { this.marker = ref }}>{!this.props.letterCorralled && <LottieView loop={true}
         ref={animation => {
           this.letterAnimation = animation;
         }}
@@ -161,12 +161,13 @@ class Draggable extends React.Component {
           width:80,
           height: this.state.letterDragging ? 160 : 90,
           right: this.state.letterDragging ? 10 : 0,
-          
+          // bottom: (this.props.targetCorralled) ? 30 : 0
+
           
         }]}
         source={source}
        
-      /></View>
+    />}</View>
  
     }
 
@@ -189,8 +190,8 @@ class Draggable extends React.Component {
           transform: this._animatedValue.getTranslateTransform()
         }  
         
-      return (<Animated.View style={[styles.view,this.stylesHelper()]} {...this._panResponder.panHandlers} style={[animatedStyle]}>
-            {!this.props.letterCorralled && this.tempLetterHelper()}
+      return (<Animated.View style={[styles.view,]} {...this._panResponder.panHandlers} style={[animatedStyle]}>
+            {this.tempLetterHelper()}
           </Animated.View>
       );
     }
@@ -212,8 +213,8 @@ const styles = StyleSheet.create({
         textAlign:'center'
     },
     wompedText: {
-        position:'absolute',
-        bottom:"1%"
+        // position:'absolute',
+        // top:5000
         
     }
    
@@ -235,7 +236,9 @@ const mapStateToProps = (state,ownProps) => {
             cloneCorralled:state.corralledLetters.find(letter=>letter.actualLetter===ownProps.letter),
             wordSpelled:(state.letterHitBoxes.length == 0 ? true : false),
             selectedWord:state.selectedWord,
-            celebrate:ownProps.celebrate}
+            celebrate:ownProps.celebrate,
+            targetCorralled: ownProps.targetCorralled
+            }
 }
  
  export default connect(mapStateToProps,mapDispatchToProps)(Draggable);
