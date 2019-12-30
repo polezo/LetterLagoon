@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Animated } from 'react-native';
 import Draggable from './draggable'
 import uuid from 'react-uuid'
 import { connect } from 'react-redux'
+
 import sample from 'lodash/sample'
 
 
@@ -46,7 +47,7 @@ addTheDamnBox = () => {
 
 getWomped = () => {
     this._getWomped.start()
-    // setTimeout(this.props.toggleWomped,500)
+   
 }
 
 levelRotate = () => {
@@ -158,7 +159,9 @@ render(){
             (this.state.letterDragging) && {bottom:90},
             
             // (this.props.5Corralled) && {bottom:90}
-            ]}>_</Text></View>
+            ]}>_</Text>
+           
+            </View>
 }
 
 }

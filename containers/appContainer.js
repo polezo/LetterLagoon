@@ -12,11 +12,14 @@ import sample from "lodash/sample"
 
 
 
+
 const Fragment=React.Fragment
 
 let _this = null
 
 class GamesContainer extends React.Component {
+
+  state={womping:true};
 
   static navigationOptions = ({ navigation }) => ({
     title:"LetterLagoon",
@@ -77,6 +80,9 @@ async spellTheWordDone(playbackstatus) {
          }
 }
 
+zIndexHelper = () => {
+  return this.state.womping ? 99 : -99
+}
 
 unload = (sound) => {
   sound.unloadAsync()
@@ -85,6 +91,7 @@ unload = (sound) => {
 
 
 componentDidMount = () => {
+  setTimeout(this.getWomped,400)
   Audio.setAudioModeAsync({
     allowsRecordingIOS: false,
     interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
@@ -95,6 +102,8 @@ componentDidMount = () => {
 });
   _this = this
 }
+
+
 
 componentWillUnmount = () => {
   if (this.wordSound) {
@@ -112,7 +121,19 @@ celebrate = () => {
   this.firework3.play()
   this.firework4.play()
   this.celebrateEncouragement()
+  this.setState({womping:true})
+  if (this.props.level < 10) {
+  setTimeout(this.getWomped,2000)
+  } else {
+    this.setState({womping:false})
+  }
 }
+
+getWomped = () => {
+   
+  this.womper.play()
+  setTimeout(()=>this.setState({womping:false}),1700)
+  }
 
 encouragementHelper = () => {
   return [require('../assets/Encouragement/GoodJob.mp3'),require('../assets/Encouragement/GreatWork.mp3'),require('../assets/Encouragement/Nice.mp3'),require('../assets/Encouragement/WayToGo.mp3'),require('../assets/Encouragement/WellDone.mp3')]
@@ -153,7 +174,7 @@ levelHelper = () => {
 render() { return <Fragment><StatusBar barStyle="light-content" backgroundColor="red" /><View style={{
   position:"absolute",
 top:200,right:0,}} ref={animationDiv=>this.animationDiv=animationDiv}>
-
+   
 <LottieView loop={false}
   ref={animation => {
     this.firework1 = animation;
@@ -217,8 +238,25 @@ top:200,right:0,}} ref={animationDiv=>this.animationDiv=animationDiv}>
  
 />
 
+
 </View>
-{this.levelHelper()}</Fragment>}
+{this.levelHelper()}
+<LottieView loop={false}
+  ref={animation => {
+    this.womper = animation;
+  }}
+  style={{
+    position:"absolute",
+    zIndex:this.zIndexHelper(),
+    height: 1100,
+    bottom:0,
+    right:0
+   
+  }}
+  source={require('../assets/animations/womper.json')}
+ 
+/> 
+</Fragment>}
 }
 
 mapStateToProps = (state) => {

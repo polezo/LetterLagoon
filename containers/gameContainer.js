@@ -8,6 +8,7 @@ import { Audio } from 'expo-av'
 import paths from '../assets/wordsJson'
 
 
+
 class GameContainer extends React.Component {
 
   constructor(props) {
@@ -16,9 +17,11 @@ class GameContainer extends React.Component {
     this.narratorSound = null
     this.letsStart = null;
     this.spellTheWord = null;
+   
   }
 
   componentDidMount = () => {
+    
     Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
       interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
@@ -36,10 +39,13 @@ class GameContainer extends React.Component {
     if (this.props.level != nextProps.level) {
       
         return true
+        
       }
       
     return false
     }
+
+    
 
     async _loadNewPlaybackInstance(playing) {
       if (this.narratorSound != null) {
@@ -99,6 +105,8 @@ class GameContainer extends React.Component {
     }
   }
 
+
+
   _spellTheWordDone = playbackStatus => {
     if (playbackStatus.didJustFinish) {
       const source3 = paths()[`${this.props.selectedWord}`];
@@ -116,6 +124,7 @@ class GameContainer extends React.Component {
   }
 
   componentDidUpdate = () => {
+
     if (this.props.level > 1) {
       
       this._loadAnotherPlaybackInstance(true);
@@ -146,7 +155,7 @@ class GameContainer extends React.Component {
      this.spellTheWord.playAsync()
    }
     
-  
+
 
   componentWillUnmount() {
     if (this.narratorSound) {this.narratorSound.unloadAsync()};
@@ -171,12 +180,13 @@ class GameContainer extends React.Component {
       let x = Math.random() < 0.5 ? -1 : 1;
       let rotationSkipper = Math.random() < 0.5 ? 0 : 1;
 
-      return (<View style={styles.container} >
+      return (<View style={styles.container} > 
+     
       {this.wordRenderHelper().split("").map((letter,i)=>{
         let id=uuid()
         let letterId=uuid()
       return <View key={uuid()} ><WompContainer celebrate={this.props.celebrate} rotationSkipper={rotationSkipper} i={i}key={id} id={id} letterId={letterId} x={x} letter={letter}/></View>})}
-         
+
         </View>
       );
     }
