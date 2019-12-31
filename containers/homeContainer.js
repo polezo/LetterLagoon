@@ -3,6 +3,7 @@ import { View, Text, StatusBar, StyleSheet, TouchableOpacity,ImageBackground} fr
 import {connect} from 'react-redux'
 import { MaterialIcons } from '@expo/vector-icons';
 import LottieView from "lottie-react-native";
+import { Audio } from 'expo-av'
 
 
 class HomeScreen extends React.Component {
@@ -21,11 +22,94 @@ class HomeScreen extends React.Component {
   componentDidMount = () => {
     this.gates.play()
     setTimeout(this.gatesOpened,1000)
+
+    Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+      playsInSilentModeIOS: true,
+      shouldDuckAndroid: true,
+      interruptionModeAndroid:          Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+      playThroughEarpieceAndroid: false,
+  });
+
+  this._loadNewPlaybackInstance(require('../assets/Narration/0-Welcome.mp3'));
+ 
+
   }
+
+
+  async _loadNewPlaybackInstance(clip) {
+    
+    if (this.narratorSound != null) {
+        await this.narratorSound.unloadAsync();
+        this.narratorSound.setOnPlaybackStatusUpdate(null);
+        this.narratorSound = null;
+     }
+    
+     const source = clip
+
+     const initialStatus = {
+//        Play by default
+          shouldPlay: false,
+//        Control the speed
+          rate: 1.0,
+//        Correct the pitch
+          shouldCorrectPitch: true,
+//        Control the Volume
+          volume: 1.0,
+//        mute the Audio
+          isMuted: false
+     };
+
+     const { sound, status } = await Audio.Sound.createAsync(
+         source,
+         initialStatus
+    );
+
+//  Save the response of sound in playbackInstance
+      
+    this.narratorSound = sound;
+    
+    this.narratorSound.setOnPlaybackStatusUpdate(this.welcomeDone);
+
+//  Play the Music
+
+    this.narratorSound.playAsync();
+    setTimeout(()=>this.unload(sound),2500)  
+}
+
+async welcomeDone(playbackstatus) {
+  if (playbackstatus.didJustFinish) {
+  const source3 = require('../assets/Letters/Z2.mp3')
+  const initialStatus = {
+              shouldPlay: true,
+              rate: 1.0,
+              shouldCorrectPitch: true,
+              volume: 1.0,
+              isMuted: false
+         };
+  
+         const { sound } = await Audio.Sound.createAsync(
+             source3,
+             initialStatus
+        );   
+        
+        sound.playAsync();
+      
+  
+         }
+}
+
+
+unload = (sound) => {
+  sound.unloadAsync()
+}
+
 
   gatesOpened = () => {
     this.setState({opening:false})
-    this.zFly.play()
+    setTimeout(()=>this.zFly.play(),1500)
+    
     setTimeout(()=>this.setState({flown:false}),2000)
   }
 
