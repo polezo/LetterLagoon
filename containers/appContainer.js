@@ -1,6 +1,6 @@
 import React from 'react';
 import GameContainer from './gameContainer'
-import {StatusBar,View,Text} from 'react-native'
+import {StatusBar,View,ImageBackground} from 'react-native'
 import {connect} from 'react-redux'
 import VowelGameContainer from './vowelGameContainer'
 import { MaterialIcons } from '@expo/vector-icons';
@@ -9,6 +9,7 @@ import paths from '../assets/wordsJson'
 import YouWin from './youWinContainer'
 import LottieView from "lottie-react-native";
 import sample from "lodash/sample"
+import {ScreenOrientation} from 'expo'
 
 
 
@@ -91,6 +92,7 @@ unload = (sound) => {
 
 
 componentDidMount = () => {
+  this.changeScreenOrientation()
   setTimeout(this.getWomped,400)
   Audio.setAudioModeAsync({
     allowsRecordingIOS: false,
@@ -103,7 +105,9 @@ componentDidMount = () => {
   _this = this
 }
 
-
+changeScreenOrientation = () => {
+  ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+}
 
 componentWillUnmount = () => {
   if (this.wordSound) {
@@ -171,7 +175,8 @@ levelHelper = () => {
   return comp
 }
 
-render() { return <Fragment><StatusBar barStyle="light-content" backgroundColor="red" /><View style={{
+
+render() { return <ImageBackground source={require('../assets/paperBg.jpg')} style={{width: '100%', height: '100%'}}><StatusBar barStyle="light-content" backgroundColor="red" /><View style={{
   position:"absolute",
 top:200,right:0,}} ref={animationDiv=>this.animationDiv=animationDiv}>
    
@@ -250,13 +255,14 @@ top:200,right:0,}} ref={animationDiv=>this.animationDiv=animationDiv}>
     zIndex:this.zIndexHelper(),
     height: 1100,
     bottom:0,
-    right:0
+    right:0,
+    opacity:1
    
   }}
   source={require('../assets/animations/womper.json')}
  
 /> 
-</Fragment>}
+</ImageBackground>}
 }
 
 mapStateToProps = (state) => {

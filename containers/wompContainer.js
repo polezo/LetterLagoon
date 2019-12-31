@@ -180,7 +180,8 @@ const styles = StyleSheet.create({
         bottom:90,
         fontSize: 80,
         fontWeight:"bold",
-        textAlign:'center'
+        textAlign:'center',
+        opacity:0.95
     },
     text2: {
         fontFamily:"AmericanTypewriter", 

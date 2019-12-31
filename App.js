@@ -8,6 +8,7 @@ import {createStore} from 'redux'
 import {createAppContainer} from 'react-navigation'
 import {createStackNavigator} from 'react-navigation-stack'
 
+
 const store = createStore(rootReducer,window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
 const AppNavigator = createStackNavigator(
@@ -24,6 +25,7 @@ let Navigation = createAppContainer(AppNavigator)
 
 
 class App extends React.Component {
+
 
 
 render() {return <Provider store={store}><Navigation/></Provider>}

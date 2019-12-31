@@ -161,6 +161,7 @@ class Draggable extends React.Component {
           width:80,
           height: this.state.letterDragging ? 160 : 90,
           right: this.state.letterDragging ? 10 : 0,
+          opacity:0.95
           // bottom: (this.props.targetCorralled) ? 30 : 0
 
           
