@@ -30,9 +30,9 @@ class GameContainer extends React.Component {
       interruptionModeAndroid:          Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
       playThroughEarpieceAndroid: false,
   });
-//  This function will be called
-  this._loadNewPlaybackInstance(true);
-  // this.props.nukeLetterHitboxes()
+
+  this._onPlaybackStatusUpdate(true);
+
   }
 
   shouldComponentUpdate(nextProps,nextState) {
@@ -47,47 +47,8 @@ class GameContainer extends React.Component {
 
     
 
-    async _loadNewPlaybackInstance(playing) {
-      if (this.narratorSound != null) {
-          await this.narratorSound.unloadAsync();
-          this.narratorSound.setOnPlaybackStatusUpdate(null);
-          this.narratorSound = null;
-       }
-       if (this.props.level < 2) {
-       const source = require('../assets/Narration/0-Welcome.mp3');
-
-       const initialStatus = {
-  //        Play by default
-            shouldPlay: false,
-  //        Control the speed
-            rate: 1.0,
-  //        Correct the pitch
-            shouldCorrectPitch: true,
-  //        Control the Volume
-            volume: 1.0,
-  //        mute the Audio
-            isMuted: false
-       };
-
-       const { sound, status } = await Audio.Sound.createAsync(
-           source,
-           initialStatus
-      );
-
-  //  Save the response of sound in playbackInstance
-        
-      this.narratorSound = sound;
-      
-      this.narratorSound.setOnPlaybackStatusUpdate(this._onPlaybackStatusUpdate);
-
-  //  Play the Music
- 
-      this.narratorSound.playAsync();
-       }
-  }
-
   _onPlaybackStatusUpdate = playbackStatus => {
-    if (playbackStatus.didJustFinish) {
+ 
       const source2 = require('../assets/Narration/2S-LetsStart.mp3');
 
 
@@ -102,7 +63,7 @@ class GameContainer extends React.Component {
        initialStatus2
       );
 
-    }
+    
   }
 
 

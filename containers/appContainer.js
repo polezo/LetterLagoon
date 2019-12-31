@@ -105,7 +105,7 @@ componentDidMount = () => {
   _this = this
 }
 
-changeScreenOrientation = () => {
+changeScreenOrientation = () =>{
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
 }
 
