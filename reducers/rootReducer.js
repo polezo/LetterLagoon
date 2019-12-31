@@ -7,7 +7,7 @@ function initState () {
         level:1,
         allWords:["BUT", "VERY", "NOT", "IT", "NICE", "KICK", "BIKE", "GO", "BALL", "HE", "BE", "MAKE", "HAPPY", "PLAY", "EAT", "PIZZA",
             "PIG", "CAT", "DOG", "BAT", "BIG", "RED", "YES", "FAT", "SIT", "BIG", "WIG", "MAD", "SAD", "VAN", "GUM", "HEN", "MAP", "EGG", "COW", "CAR", "HAT", "MAN", "CAN", "RAT", "BUS", "BAG", "ANT", "CUT", "LOG", "WIN", "MOM", "DAD", "BUG", "SUN", "NUT", "NET", "HER", "AND", "RAN"],
-        selectedWord:"PIZZA",
+        selectedWord:"START",
         letterHitBoxes:[],
         corralledLetters:[],
         womped:false,
