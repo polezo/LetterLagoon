@@ -20,8 +20,8 @@ class HomeScreen extends React.Component {
          flown:true,}
 
   componentDidMount = () => {
-    this.gates.play()
-    setTimeout(this.gatesOpened,1000)
+    setTimeout(()=>this.gates.play(),500)
+    setTimeout(this.gatesOpened,1500)
 
     Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
@@ -32,7 +32,7 @@ class HomeScreen extends React.Component {
       playThroughEarpieceAndroid: false,
   });
 
-  this._loadNewPlaybackInstance(require('../assets/Narration/0-Welcome.mp3'));
+  setTimeout(()=>this._loadNewPlaybackInstance(require('../assets/Narration/0-Welcome.mp3'),500));
  
 
   }
@@ -82,7 +82,7 @@ async welcomeDone(playbackstatus) {
   if (playbackstatus.didJustFinish) {
   const source3 = require('../assets/Letters/Z2.mp3')
   const initialStatus = {
-              shouldPlay: true,
+              shouldPlay: false,
               rate: 1.0,
               shouldCorrectPitch: true,
               volume: 1.0,
@@ -94,7 +94,7 @@ async welcomeDone(playbackstatus) {
              initialStatus
         );   
         
-        sound.playAsync();
+        setTimeout(()=>sound.playAsync(),2000)
       
   
          }
@@ -108,7 +108,7 @@ unload = (sound) => {
 
   gatesOpened = () => {
     this.setState({opening:false})
-    setTimeout(()=>this.zFly.play(),1500)
+    setTimeout(()=>this.zFly.play(),3000)
     
     setTimeout(()=>this.setState({flown:false}),2000)
   }

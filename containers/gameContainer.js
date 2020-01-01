@@ -99,7 +99,7 @@ class GameContainer extends React.Component {
       this.spellTheWord.setOnPlaybackStatusUpdate(null);
       this.spellTheWord = null;
    }
-    const source2 = require('../assets/Narration/9-SpellTheWord.mp3');
+    const source2 = require('../assets/Narration/WomperStompLaugh2.mp3');
     const initialStatus2 = {
       //        Play by default
                 shouldPlay: false,
@@ -111,11 +111,16 @@ class GameContainer extends React.Component {
       initialStatus2
      );
 
-     this.spellTheWord = sound
-     this.spellTheWord.setOnPlaybackStatusUpdate(this._spellTheWordDone);
-     this.spellTheWord.playAsync()
+     this.womperSounds = sound
+     this.womperSounds.setOnPlaybackStatusUpdate(this._spellTheWordDone);
+     this.womperSounds.playAsync()
+     setTimeout(()=>this.unload(sound),4000)
    }
     
+
+   unload = (sound) => {
+    sound.unloadAsync()
+  }
 
 
   componentWillUnmount() {
