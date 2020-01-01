@@ -68,19 +68,9 @@ class GameContainer extends React.Component {
 
 
 
-  _spellTheWordDone = playbackStatus => {
+  _womperSoundDone = playbackStatus => {
     if (playbackStatus.didJustFinish) {
-      const source3 = paths()[`${this.props.selectedWord}`];
-      const initialStatus2 = {
-        //        Play by default
-                  shouldPlay: true,
-   
-             };
- 
-      Audio.Sound.createAsync(
-        source3,
-        initialStatus2
-       );
+    this.playSpellTheWord()
     }
   }
 
@@ -88,22 +78,56 @@ class GameContainer extends React.Component {
 
     if (this.props.level > 1) {
       
-      this._loadAnotherPlaybackInstance(true);
+      this._loadWomperSound(true);
   }
 
 }
     
-  async _loadAnotherPlaybackInstance() {
-    if (this.spellTheWord != null) {
-      await this.spellTheWord.unloadAsync();
-      this.spellTheWord.setOnPlaybackStatusUpdate(null);
-      this.spellTheWord = null;
-   }
-    const source2 = require('../assets/Narration/WomperStompLaugh2.mp3');
+  async playSpellTheWord() {
+    const source3 = require('../assets/Narration/9-SpellTheWord.mp3');
+    const initialStatus2 = {
+ 
+                shouldPlay: false,
+           };
+          
+    const { sound }  = await Audio.Sound.createAsync(
+      source3,
+      initialStatus2
+     );
+     sound.playAsync()
+     sound.setOnPlaybackStatusUpdate(this._spellTheWordDone);
+     setTimeout(()=>this.unload(sound),3000)
+  }
+
+  _spellTheWordDone = playbackStatus => {
+    if (playbackStatus.didJustFinish) {
+    this.playTheWord()
+    }
+  }
+
+  async playTheWord() {
+    const source3 = paths()[`${this.props.selectedWord}`];
+    const initialStatus2 = {
+ 
+                shouldPlay: false,
+           };
+          
+    const { sound }  = await Audio.Sound.createAsync(
+      source3,
+      initialStatus2
+     );
+     sound.playAsync()
+    
+     setTimeout(()=>this.unload(sound),3000)
+  }
+
+  async _loadWomperSound() {
+   
+    const source2 = require('../assets/Narration/WomperStompLaugh.mp3');
     const initialStatus2 = {
       //        Play by default
                 shouldPlay: false,
- 
+                volume: 1.0,
            };
 
     const { sound, status } = await Audio.Sound.createAsync(
@@ -112,9 +136,9 @@ class GameContainer extends React.Component {
      );
 
      this.womperSounds = sound
-     this.womperSounds.setOnPlaybackStatusUpdate(this._spellTheWordDone);
+     this.womperSounds.setOnPlaybackStatusUpdate(this._womperSoundDone);
      this.womperSounds.playAsync()
-     setTimeout(()=>this.unload(sound),4000)
+     setTimeout(()=>this.unload(this.womperSounds),4000)
    }
     
 

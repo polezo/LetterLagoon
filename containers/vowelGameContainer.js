@@ -31,51 +31,38 @@ class VowelGameContainer extends React.Component {
         playThroughEarpieceAndroid: false,
     });
   //  This function will be called
-    this._loadNewPlaybackInstance(true);
+    this._loadWomperSound();
   }
 
   vowelTest = (s) => {
     return (/^[aeiou]$/i).test(s);
   }
 
-  async _loadNewPlaybackInstance(playing) {
-    if (this.narratorSound != null) {
-        await this.narratorSound.unloadAsync();
-        this.narratorSound.setOnPlaybackStatusUpdate(null);
-        this.narratorSound = null;
-     }
+  async _loadWomperSound() {
+   
+    const source2 = require('../assets/Narration/WomperStompLaugh2.mp3');
+    const initialStatus2 = {
+      //        Play by default
+                shouldPlay: false,
+ 
+           };
 
-     const source = require('../assets/Narration/FindTheVowelsFor.mp3');
+    const { sound, status } = await Audio.Sound.createAsync(
+      source2,
+      initialStatus2
+     );
 
-     const initialStatus = {
-//        Play by default
-          shouldPlay: false,
-//        Control the speed
-          rate: 1.0,
-//        Correct the pitch
-          shouldCorrectPitch: true,
-//        Control the Volume
-          volume: 1.0,
-//        mute the Audio
-          isMuted: false
-     };
-
-     const { sound, status } = await Audio.Sound.createAsync(
-         source,
-         initialStatus
-    );
-
-//  Save the response of sound in playbackInstance
-      
-    this.narratorSound = sound;
+     this.womperSounds = sound
+     this.womperSounds.setOnPlaybackStatusUpdate(this._womperSoundDone);
+     this.womperSounds.playAsync()
+     setTimeout(()=>this.unload(this.womperSounds),4000)
+   }
     
-    this.narratorSound.setOnPlaybackStatusUpdate(this._onPlaybackStatusUpdate);
 
-//  Play the Music
+   unload = (sound) => {
+    sound.unloadAsync()
+  }
 
-    this.narratorSound.playAsync();
-
-}
   shouldComponentUpdate(nextProps,nextState) {
     if (this.props.level != nextProps.level) {
       
@@ -86,26 +73,54 @@ class VowelGameContainer extends React.Component {
     }
   
     componentDidUpdate = () => {
-    this._loadNewPlaybackInstance(true)
+    this._loadWomperSound()
   
     }
 
-    _onPlaybackStatusUpdate = (playbackStatus) => {
-        if (playbackStatus.didJustFinish) {
-            const source3 = paths()[`${this.props.selectedWord}`];
-            const initialStatus2 = {
-              //        Play by default
-                        shouldPlay: true,
-         
-                   };
-       
-            Audio.Sound.createAsync(
-              source3,
-              initialStatus2
-             );
-          }
+    _womperSoundDone = (playbackStatus) => {
+      if (playbackStatus.didJustFinish) {
+        this.playFindTheVowelSound()
+        }
     }
 
+    async playFindTheVowelSound() {
+      const source3 = require('../assets/Narration/FindTheVowelsFor.mp3');
+      const initialStatus2 = {
+   
+                  shouldPlay: false,
+             };
+            
+      const { sound }  = await Audio.Sound.createAsync(
+        source3,
+        initialStatus2
+       );
+       sound.playAsync()
+       sound.setOnPlaybackStatusUpdate(this._findTheVowelDone);
+       setTimeout(()=>this.unload(sound),3000)
+    }
+
+    _findTheVowelDone = playbackStatus => {
+      if (playbackStatus.didJustFinish) {
+      this.playTheWord()
+      }
+    }
+  
+    async playTheWord() {
+      const source3 = paths()[`${this.props.selectedWord}`];
+      const initialStatus2 = {
+   
+                  shouldPlay: false,
+             };
+            
+      const { sound }  = await Audio.Sound.createAsync(
+        source3,
+        initialStatus2
+       );
+       sound.playAsync()
+      
+       setTimeout(()=>this.unload(sound),3000)
+    }
+ 
     wordRenderHelper = () => {
       if (this.props.wordSpelled || (this.props.level > 5)) {
       let newWord = sample(this.props.allWords)

@@ -99,7 +99,7 @@ class Draggable extends React.Component {
               shouldPlay: false,
               rate: 1.0,
               shouldCorrectPitch: true,
-              volume: 1.0,
+              volume: 0.5,
               isMuted: false
          };
   

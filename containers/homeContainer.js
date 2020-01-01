@@ -7,6 +7,12 @@ import { Audio } from 'expo-av'
 
 
 class HomeScreen extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.welcomeDone = this.welcomeDone.bind(this)
+  }
+
   static navigationOptions = ({ navigation }) => ({
     title:"LetterLagoon",
     headerRight: <MaterialIcons name="live-help" size={32} color="white" onPress={()=> _this.saySomething() } style={{right:10}}  />,
@@ -33,7 +39,12 @@ class HomeScreen extends React.Component {
   });
 
   setTimeout(()=>this._loadNewPlaybackInstance(require('../assets/Narration/0-Welcome.mp3'),500));
- 
+  this.props.navigation.addListener('didBlur', () => {
+    
+  if (this.zflySound) {
+    this.unload(this.zflySound)
+  }}
+); 
 
   }
 
@@ -66,13 +77,13 @@ class HomeScreen extends React.Component {
          initialStatus
     );
 
-//  Save the response of sound in playbackInstance
+
       
     this.narratorSound = sound;
     
     this.narratorSound.setOnPlaybackStatusUpdate(this.welcomeDone);
 
-//  Play the Music
+
 
     this.narratorSound.playAsync();
     setTimeout(()=>this.unload(sound),2500)  
@@ -93,12 +104,13 @@ async welcomeDone(playbackstatus) {
              source3,
              initialStatus
         );   
-        
-        setTimeout(()=>sound.playAsync(),2000)
-      
-  
+        this.zflySound = sound
+     
+        setTimeout(()=>this.zflySound.playAsync(),2000)
+    
          }
 }
+
 
 
 unload = (sound) => {

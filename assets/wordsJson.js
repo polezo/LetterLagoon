@@ -47,6 +47,7 @@ export default paths = () => {
     "RED": require("../assets/Words/RED.mp3"),
     "SAD": require("../assets/Words/SAD.mp3"),
     "SIT": require("../assets/Words/SIT.mp3"),
+    "START":require("../assets/Words/START.mp3"),
     "SUN": require("../assets/Words/SUN.mp3"),
     "VAN": require("../assets/Words/VAN.mp3"),
     "VERY": require("../assets/Words/VERY.mp3"),
